@@ -10,18 +10,16 @@ const Admin = require('../Models/Admin.js');
 router.post('/register', async (req, res) => {
     allUser = await User.find();
     allUser = allUser.filter(u => u.Email.toString() == req.body.Email.toString());
-    console.log(user);
-    if (user.length > 0) {
+    // console.log(user);
+    if (allUser.length > 0) {
 
         res.status(300).send({ err: "Email already exists!!!" });
         return;
     }
-
-    const newUser = User({
-        Email: req.body.Email, password: req.body.password
-    })
+    else{
+        const newUser = User(req.body);
     newUser.save().then(User => res.json(User));
-
+    }
 });
 
 //Sign in as a user
@@ -52,9 +50,16 @@ router.post('/:Email/CreateFlight', async (req, res) => {
     allUsers = await User.find();
     allUsers = allUsers.filter(u=> u.Email.toString() == req.body.Email);
     if (allUsers.AdminPrivilieges = "True") {
+        const allSeats = req.body.EcoSeats + req.body.BusniessSeats;
+        let mySeats = [];
+        for(let i=0;i<allSeats;i++){
+            mySeats.push(0)
+        }
+        // console.log(mySeats)
         const newFlight = new Flight({
             Code: req.body.Code, Airport: req.body.Airport,EcoSeats: req.body.EcoSeats,BusniessSeats: req.body.BusniessSeats,
             Date: req.body.Date,Terminal: req.body.Terminal,Arrival: req.body.Arrival,Departure: req.body.Departure, Available: req.body.Available,
+            SeatsArray:mySeats
         })
         newFlight.save().then(Flight => res.json(Flight));
     }
@@ -131,6 +136,25 @@ router.get('/:Email/SearchFlight/:searchTerm', async(req,res)=>{
         res.status(400).send("You're not an admin")
     }
 })
+
+router.put('/:id/EditProfile/',async(req,res)=>{
+    await User.findById(req.params.id)
+    .then(User=>User.update().then(() => res.json({success:true})))
+    .catch(err => res.status(404).json({sucess:false}))
+    if(User.AdminPrivilieges == "True"){
+        user = await User.findById(req.params.id);
+        await user.update(req.body);
+    }
+    else{
+        await user.update({"Email": req.body.Email,"Password": req.body.Password, "FirstName": req.body.FirstName,
+        "LastName": req.body.LastName,"PassportNumber": req.body.PassportNumber})
+    }
+
+})
+
+
+
+
 
 
 

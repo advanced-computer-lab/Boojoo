@@ -11,11 +11,11 @@ const FlightSchema = new Schema({
         required: true
     },
     EcoSeats: {
-        type: String,
+        type: Number,
         required: true,
     },
     BusniessSeats: {
-        type: String,
+        type: Number,
         required: true
     },
     Date:{
@@ -23,7 +23,7 @@ const FlightSchema = new Schema({
         required: true,
     },
     Terminal: {
-        type: String,
+        type: Number,
         required: true
     },
     Available:{
@@ -37,7 +37,27 @@ const FlightSchema = new Schema({
     Departure:{
         type: String,
         required:true
+    },
+    From:{
+        type:String,
+        required:false
+    },
+    To:{
+        type:String,
+        required:false
+    },
+    Price:{
+        type:String,
+        required:false
+    },
+    TripDuration:{
+        type:String,
+        required:false
+    },
+    SeatsArray:{
+        type:[Number]
     }
+
 
 });
 

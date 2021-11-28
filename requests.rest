@@ -1,0 +1,34 @@
+POST http://localhost:8000/Users/abdo@gmail.com/CreateFlight
+content-type: application/json
+
+{
+    "Code": "A14",
+    "Airport": "Cairo, dairy",
+    "EcoSeats": 24,
+    "BusniessSeats": 16,
+    "Date": "This is the date",
+    "Terminal": "2",
+    "Arrival": "el sbt el sob7",
+    "Departure": "el gom3h bleel",
+    "Available": true
+}
+
+###
+POST http://localhost:8000/Users/register
+content-type: application/json
+
+{
+"Email":"abdo@gmail.com",
+"Password":"12345678",
+"AdminPrivilieges":true
+}
+
+###
+POST http://localhost:8000/Users/register
+content-type: application/json
+
+{
+"Email":"abdo@gmail.com",
+"Password":"12345678",
+"AdminPrivilieges":true
+}

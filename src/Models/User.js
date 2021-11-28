@@ -14,6 +14,22 @@ const UserSchema = new Schema({
         type: Boolean,
         required: false,
         default:false
+    },
+    PassportNumber:{
+        type:String,
+        required:false
+    },
+    FirstName:{
+        Type:String,
+        required:false
+    },
+    LastName:{
+        Type:String,
+        required:false
+    },
+    Cart:{
+        Type:Array,
+        default:[]
     }
 });
 
