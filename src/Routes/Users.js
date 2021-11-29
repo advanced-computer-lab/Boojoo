@@ -3,6 +3,7 @@ const router = express.Router();
 const User = require('../Models/User.js');
 const Flight = require('../Models/Flight.js');
 const Admin = require('../Models/Admin.js');
+const Reservation = require("../Models/Reservation.js");
 
 
 
@@ -44,26 +45,6 @@ router.post('/Signin', async (req, res) => {
 
 });
 
-
-//Create new Flight
-router.post('/:Email/CreateFlight', async (req, res) => {
-    allUsers = await User.find();
-    allUsers = allUsers.filter(u=> u.Email.toString() == req.body.Email);
-    if (allUsers.AdminPrivilieges = "True") {
-        const allSeats = req.body.EcoSeats + req.body.BusniessSeats;
-        let mySeats = [];
-        for(let i=0;i<allSeats;i++){
-            mySeats.push(0)
-        }
-        // console.log(mySeats)
-        const newFlight = new Flight({
-            Code: req.body.Code, Airport: req.body.Airport,EcoSeats: req.body.EcoSeats,BusniessSeats: req.body.BusniessSeats,
-            Date: req.body.Date,Terminal: req.body.Terminal,Arrival: req.body.Arrival,Departure: req.body.Departure, Available: req.body.Available,
-            SeatsArray:mySeats
-        })
-        newFlight.save().then(Flight => res.json(Flight));
-    }
-});
 
 //View all Flights for admin
 router.get('/:Email/ViewAllFlights', async (req, res) => {
