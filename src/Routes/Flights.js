@@ -37,6 +37,7 @@ router.post('/:Email/CreateFlight', async (req, res) => {
         const newFlight = new Flight({
             Code: req.body.Code, Airport: req.body.Airport,EcoSeats: req.body.EcoSeats,BusniessSeats: req.body.BusniessSeats,
             Date: req.body.Date,Terminal: req.body.Terminal,Arrival: req.body.Arrival,Departure: req.body.Departure, Available: req.body.Available,
+            From: req.body.From,To: req.body.To, Price: req.body.Price,TripDuartion: req.body.TripDuartion,
             SeatsArray:mySeats
         })
         newFlight.save().then(Flight => res.json(Flight));
@@ -44,20 +45,17 @@ router.post('/:Email/CreateFlight', async (req, res) => {
 });
 
 // Reserve a seat
-router.post(':Email/ReserveFlight/:id', async(req,res) =>{
-    const Flighty = await Flight.findById(req.params.id);
+router.post('/ReserveFlight', async(req,res) =>{
+    //const Flighty = await Flight.findById(req.params.id);
     allusers = await User.find();
-    allusers = allusers.filter(u => u.email.toString()==req.body.Email);
+    //allusers = allusers.filter(u => u.email.toString()==req.params.Email.toString());
     if(allusers.length>0){
         try{
             // const Userx = allusers[0];
             // const Flighty = await Flight.findById(req.params.id);
             //Create reservation
-            const newReservation =new Reservation({Attendant:allusers ,
-                Tickety:Flighty, SeatNumber: req.body.SeatNumber
-            });
+            const newReservation =new Reservation(req.body);
             newReservation.save().then(Reservation => res.json(Reservation));
-            
         }
         catch{
             res.status(400).send("You aren't registered");
@@ -68,20 +66,25 @@ router.post(':Email/ReserveFlight/:id', async(req,res) =>{
 })
 
 
-router.delete(':id/DeleteReservation/:Email', async(req,res)=>{
-    Reservationy = await Reservation.findById(req.params.id);
-    if(req.params.Email.toString()== Reservationy.Attendant){
-        try{
-            Reservationy.then(Reservation => Reservation.remove().then(() => res.json({ success: true })))
-            .catch(err => res.status(404).json({ sucess: false }));
-        }
-        catch{
-            res.status(400 ).send('You are not the Attendant!!');
-        }}
+router.delete('/CancelReservation/:id', async(req,res)=>{
+    await Reservation.findById(req.params.id)
+    .then(Reservation => Reservation.remove().then(() => res.json({ success: true })))
+    .catch(err => res.status(404).json({ sucess: false }));
 }); 
 
-
-
+router.get('/ViewDeparture/:id',async(req,res)=>{
+    const Flighty = await Flight.findById(req.params.id);
+    allFlights = await Flight.find();
+    allFlights = allFlights.filter(F=>F.To==Flighty.From);
+    if(allFlights.length>0){
+        try{
+            res.send(allFlights);}
+        catch{
+            res.status(400).send("There is no Departure Flights");
+        }
+    }
+    
+})
 
 
 module.exports = router;

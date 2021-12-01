@@ -1,16 +1,20 @@
-POST http://localhost:8000/Users/abdo@gmail.com/CreateFlight
+POST http://localhost:8000/Flights/abdo@gmail.com/CreateFlight
 content-type: application/json
 
 {
-    "Code": "A14",
-    "Airport": "Cairo, dairy",
-    "EcoSeats": 24,
-    "BusniessSeats": 16,
-    "Date": "This is the date",
-    "Terminal": "2",
+    "Code": "A19",
+    "Airport": "ghard2a",
+    "EcoSeats": 26,
+    "BusniessSeats": 14,
+    "Date": "This date",
+    "Terminal": "3",
     "Arrival": "el sbt el sob7",
-    "Departure": "el gom3h bleel",
-    "Available": true
+    "Departure": " bleel",
+    "Available": true,
+    "From":"ghard2a",
+    "To":"cairo",
+    "TripDuration":"sa3a",
+    "Price":"1500"
 }
 
 ###
@@ -32,3 +36,21 @@ content-type: application/json
 "Password":"12345678",
 "AdminPrivilieges":true
 }
+
+###
+POST http://localhost:8000/Flights/ReserveFlight
+Content-Type: application/json
+
+{
+    "Attendant":"61a34b15823f448512d6e02d",
+    "Tickety":"61a35030bb7ec5a20f8f4045",
+    "SeatNumber":"16"
+}
+
+###
+DELETE http://localhost:8000/Flights/CancelReservation/61a7a7fac4d5268405f548d2
+Content-Type: application/json
+
+###
+GET http://localhost:8000/Flights/ViewDeparture/61a7dc82c8b9945890aa71d6
+Content-Type: application/json

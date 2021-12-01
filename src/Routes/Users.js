@@ -118,20 +118,21 @@ router.get('/:Email/SearchFlight/:searchTerm', async(req,res)=>{
     }
 })
 
-router.put('/:id/EditProfile/',async(req,res)=>{
-    await User.findById(req.params.id)
-    .then(User=>User.update().then(() => res.json({success:true})))
-    .catch(err => res.status(404).json({sucess:false}))
-    if(User.AdminPrivilieges == "True"){
-        user = await User.findById(req.params.id);
-        await user.update(req.body);
-    }
-    else{
-        await user.update({"Email": req.body.Email,"Password": req.body.Password, "FirstName": req.body.FirstName,
-        "LastName": req.body.LastName,"PassportNumber": req.body.PassportNumber})
-    }
+// router.put('/:id/EditProfile',async(req,res)=>{
+//     allUsers=User.findById(req.params.id);
+//     await User.findById(req.params.id)
+//         .then(User => User.update().then(() => res.json({ sucess: true })))
+//         .catch(err => res.status(404).json({ sucess: false }))
+//     if (allUsers.AdminPrivilieges = "False") {
+//         user = await User.findById(req.params.id);
+//         await user.update({ "email": req.body.email, "password": req.body.password , "PassportNumber":req.body.PassportNumber ,
+//          "FirstOne"});
+//     }
 
-})
+//     else {
+//         await user.update(req.body);
+//     }
+// });
 
 
 
