@@ -6,20 +6,28 @@ const Admin = require('../Models/Admin.js');
 const Reservation = require("../Models/Reservation.js");
 
 
+//returns users
+router.get('/',async(req,res) => {
+    //console.log("here");
+const ausers =await User.find();
+//console.log(ausers);
+return res.status(200).send( ausers);
 
+})
 //Sign up as a guest user
 router.post('/register', async (req, res) => {
     allUser = await User.find();
-    allUser = allUser.filter(u => u.Email.toString() == req.body.Email.toString());
+    allUser = allUser.filter(u => u.Email.toString() === req.body.Email.toString());
     // console.log(user);
     if (allUser.length > 0) {
-
-        res.status(300).send({ err: "Email already exists!!!" });
-        return;
+        
+        return res.status(300).send({ err: "Email already exists!!!" });
+        
     }
     else{
         const newUser = User(req.body);
     newUser.save().then(User => res.json(User));
+    return res.status(200).send({suc: "user created !"});
     }
 });
 

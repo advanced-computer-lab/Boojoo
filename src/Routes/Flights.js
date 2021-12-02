@@ -19,15 +19,17 @@ router.get('/ViewAvailableFlights', async (req, res) => {
 
 //view flight Details
 router.get('/ViewDetails/:id', async (req,res) => {
-    Flighty = await Flight.findById(req.params.id);
+  //  console.log(req.params.id);
+    const Flighty = await Flight.find({Code: req.params.id});
     res.status(200).json(Flighty);
 })
 
 //Create new Flight
-router.post('/:Email/CreateFlight', async (req, res) => {
-    allUsers = await User.find();
-    allUsers = allUsers.filter(u=> u.Email.toString() == req.body.Email);
-    if (allUsers.AdminPrivilieges = "True") {
+router.post('/CreateFlight', async (req, res) => {
+    const allUsers = await User.find();
+    const currentUser = allUsers.filter(u=> u.Email.toString() === req.body.Email);
+    console.log(currentUser);
+    if (currentUser[0].AdminPrivilieges === true) {
         const allSeats = req.body.EcoSeats + req.body.BusniessSeats;
         let mySeats = [];
         for(let i=0;i<allSeats;i++){
@@ -35,12 +37,23 @@ router.post('/:Email/CreateFlight', async (req, res) => {
         }
         // console.log(mySeats)
         const newFlight = new Flight({
-            Code: req.body.Code, Airport: req.body.Airport,EcoSeats: req.body.EcoSeats,BusniessSeats: req.body.BusniessSeats,
-            Date: req.body.Date,Terminal: req.body.Terminal,Arrival: req.body.Arrival,Departure: req.body.Departure, Available: req.body.Available,
-            From: req.body.From,To: req.body.To, Price: req.body.Price,TripDuartion: req.body.TripDuartion,
+            Code: req.body.Code, 
+            Airport: req.body.Airport,
+            EcoSeats: req.body.EcoSeats,
+            BusniessSeats: req.body.BusniessSeats,
+            Date: req.body.Date,
+            Terminal: req.body.Terminal,
+            Arrival: req.body.Arrival,
+            Departure: req.body.Departure, 
+            Available: req.body.Available,
+            From: req.body.From,
+            To: req.body.To, 
+            Price: req.body.Price,
+            TripDuartion: req.body.TripDuartion,
             SeatsArray:mySeats
         })
-        newFlight.save().then(Flight => res.json(Flight));
+        
+        await new Flight(newFlight).save().then(tempFlight => res.send(tempFlight));
     }
 });
 

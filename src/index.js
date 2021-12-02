@@ -7,7 +7,7 @@ var cors = require('cors');
 //App variables
 const app = express();
 app.use(cors({ origin: true, credentials: true }));
-const port = process.env.PORT || "8000";
+const port = process.env.PORT || 8000;
 // #Importing the userController
 
 app.use(express.urlencoded({extended: true}));

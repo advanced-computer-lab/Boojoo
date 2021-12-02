@@ -4,18 +4,19 @@ import '../App.css';
 import axios from 'axios';
 
 
+
 class CreateFlight extends Component {
     constructor() {
         super();
         this.state = {
             Code: '',
             Airport: '',
-            Terminal: Number,
+            Terminal: 0,
             Date:'',
             Arrival:'',
             Departure:'',
-            EcoSeats: Number,
-            BusniessSeats: Number,
+            EcoSeats: 0,
+            BusniessSeats: 0,
             Available:'',        
         };
     }
@@ -25,6 +26,7 @@ class CreateFlight extends Component {
     };
 
     onSubmit = e => {
+      console.log(this.state);
         e.preventDefault();
 
         const data = {
@@ -37,20 +39,23 @@ class CreateFlight extends Component {
             EcoSeats: this.state.EcoSeats,
             BusniessSeats: this.state.BusniessSeats,
             Available: this.state.Available, 
+
+            
+
         };
 
     axios
-        .post('http://localhost:8000/users/:Email/CreateFlight', data)
+        .post(`http://localhost:8000/flights/CreateFlight`, {...data,Email:"abdo@gmail.com"})
         .then(res => {
             this.setState({
                 Code: '',
                 Airport: '',
-                Terminal: Number,
+                Terminal: 0,
                 Date:'',
                 Arrival:'',
                 Departure:'',
-                EcoSeats: Number,
-                BusniessSeats: Number,
+                EcoSeats: 0,
+                BusniessSeats: 0,
                 Available:'', 
             })
             this.props.history.push('/');

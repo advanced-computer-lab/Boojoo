@@ -28,7 +28,15 @@ const FlightSchema = new Schema({
     },
     Available:{
         type: String,
-        required: true,
+       // required: true,
+    },
+    AvailableBusiness:{
+        type: Number,
+       // required: true,
+    },
+    AvailableEconomy:{
+        type: Number,
+       // required: true,    
     },
     Arrival:{
         type: String,

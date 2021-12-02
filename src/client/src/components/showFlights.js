@@ -65,7 +65,7 @@ export default function ShowFlight() {
         axios.get(`http://localhost:8000/users/:Email/SearchFlight/${searchTerm}`).then((allFlights) => {
             setFlightList(allFlights.data);
         })
-        if(searchTerm == ""){
+        if(searchTerm === ""){
             window.location.reload(false);
         }
     }
