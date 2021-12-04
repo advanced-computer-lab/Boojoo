@@ -1,0 +1,62 @@
+POST http://localhost:8000/flights/abdo@gmail.com/CreateFlight 
+content-type: application/json
+
+{
+"Code": "B1", "Airport": "qahera", "Date": "This date", "Terminal": "3", "Available": true,  "Arrival": "el sbt el sob7", "Departure": " bleel","From":"qahera", "To":"ismailia",  "Price":"1500","TripDuration":"sa3a","Seats":15,"Cabin":"Busniess","Baggage":"25"
+}
+
+###
+POST http://localhost:8000/Users/register
+content-type: application/json
+
+{
+"FirstName":"Abdo",
+"LastName":"Boojoo",    
+"Email":"abdo@gmail.com",
+"Password":"12345678",
+"AdminPrivilieges":true
+}
+
+###
+POST http://localhost:8000/Users/register
+content-type: application/json
+
+{
+"Email":"abdo@gmail.com",
+"Password":"12345678",
+"AdminPrivilieges":true
+}
+
+###
+POST http://localhost:8000/flights/ReserveFlight/61aba9d34809634a75fcb9d9
+content-type: application/json
+
+{
+	"Attendant": "61aa220071b586f5675be382",
+	"Tickety": "61aba9d34809634a75fcb9d9",
+	"SeatNumber": ["7","8","9"]
+}
+
+###
+PUT http://localhost:8000/Users/EditProfile/61a7a3d32ecf681ee765d77e
+content-type: application/json
+
+{
+    "Email":"abdo@gmail.com",
+    "FirstName":"Alo",
+    "LastName":"Alo",
+    "PassportNumber":"Alo",
+    "Password":"12345678",
+}
+
+###
+GET  http://localhost:8000/flights/viewReservations
+content-type: application/json
+
+{
+
+}
+
+###
+GET http://localhost:8000/flights/ViewDeparture/61aa38ac929ec369a75a1936
+content-type: application/json
