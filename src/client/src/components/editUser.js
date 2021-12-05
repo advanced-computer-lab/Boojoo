@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
 import '../App.css';
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
+import Navbar from 'react-bootstrap/Navbar';
+import Nav from 'react-bootstrap/Nav';
 
 class EditUser extends Component {
   constructor(props) {
@@ -32,6 +36,24 @@ class EditUser extends Component {
 
   };
 
+  editPopup = () => {
+    confirmAlert({
+        title: "Delete Flight",
+        message: "Are you sure you want to permanently delete this flight?",
+        buttons: [
+            {
+                label: "Yes",
+
+            },
+            {
+                label: "No",
+            }
+        ],
+        closeOnEscape: true,
+        closeOnClickOutside: true,
+    });
+}
+
   onChange = e => {
     this.setState({ [e.target.name]: e.target.value });
   };
@@ -57,11 +79,47 @@ class EditUser extends Component {
         .catch(err => {
             console.log("Error in Updating flight");
         })
+        confirmAlert({
+          customUI: () => {
+              return (
+                  <div>
+                      <h1>Edited User</h1>
+                      <p align='center'>Success</p>
+                  </div>
+              );
+          },
+          closeOnEscape: true,
+          closeOnClickOutside: true,
+      });
 };
 
 
   render() {
     return (
+      <>
+      <Navbar sticky="top" bg="light" variant="light">
+        <Navbar.Brand align="left" href="/">
+           {/* <img
+                alt=""
+                src="/logo.png"
+                width="30"
+                height="30"
+                className="d-inline-block align-top"
+           />{' '} */}
+            Boojoo's Flight Reservation System
+        </Navbar.Brand>
+        <Nav className="me-auto">
+            <Nav.Link href="/">Home</Nav.Link>
+            <Nav.Link href="/reservations">Reservations</Nav.Link>
+        </Nav>
+        <Navbar.Toggle />
+        <Navbar.Collapse className="justify-content-end">
+        <Navbar.Text>
+            <a href="/viewUser">User Profile</a>
+        </Navbar.Text>
+        </Navbar.Collapse>
+    </Navbar>  
+
       <div className="UpdateBookInfo">
         <div className="container">
           <div className="row">
@@ -133,6 +191,7 @@ class EditUser extends Component {
 
         </div>
       </div>
+      </>
     );
   }
 }

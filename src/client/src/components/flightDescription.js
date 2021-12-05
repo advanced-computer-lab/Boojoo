@@ -8,16 +8,50 @@ import axios from 'axios';
 import { useState } from "react";
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
+import { FieldVariable__Class } from 'blockly';
+
+const customStyles = {
+    option: provided => ({
+      ...provided,
+      color: 'black'
+    }),
+    control: provided => ({
+      ...provided,
+      color: 'black'
+    }),
+    singleValue: provided => ({
+      ...provided,
+      color: 'black'
+    })
+  }
 
 const reserveFlight = (id) => {
     //axios.post('http://localhost:8000/flights/ReserveFlight').then( () => {
         //window.location.reload(false);
     //})
-    const seats = window.localStorage.getItem('SEATS')
+    const seatNumberArray = window.localStorage.getItem('SELECTEDSEATS').split(',')
+    if(seatNumberArray[0] == ''){
+        alert('Please reserve an available seat')
+        confirmAlert({
+            customUI: () => {
+                return (
+                    <div>
+                        <h1>Please select a seat </h1>
+                        <p>Error</p>
+                    </div>
+                );
+            },
+            closeOnEscape: true,
+            closeOnClickOutside: true,
+        });
+    }
+    else{
+    console.log(seatNumberArray);
     const data = {
         Attendant: '61a7a3d32ecf681ee765d77e',
         Tickety: id,
-        SeatNumber: window.localStorage.getItem('SELECTEDSEATS')
+        SeatNumber: seatNumberArray,
+        Price: window.localStorage.getItem('PRICE')
     };
 
     console.log(data);
@@ -41,7 +75,7 @@ const reserveFlight = (id) => {
         .catch(err => {
             console.log("Error in Reserving flight");
         })
-
+    }
 }
 
 const reservePopup = _id => {
@@ -59,7 +93,7 @@ const reservePopup = _id => {
         ],
         closeOnEscape: true,
         closeOnClickOutside: true,
-    });
+    }); 
 }
 
 const setId = (id) => {
@@ -71,29 +105,26 @@ class showFlightDescription extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            multiValue: [],
+            selectedOption: null,
             flight: {},
         };
-        this.handleMultiChange = this.handleMultiChange.bind(this);
     }
 
-    handleMultiChange(option) {
-        this.setState(state => {
-            return {
-                multiValue: option
-            };
+    handleChange = (selectedOption) => {
+        this.setState({ selectedOption });
+        console.log(`Option selected:`, selectedOption);
+        var x = [];
+        var indexList = [];
+        var i = 0;
+        selectedOption.forEach(function(element) {
+            x.push(selectedOption[i].value.split('Seat:'))
+            indexList.push(x[i][1])
+            i+=1;
         });
-        const selectedSeats = this.state.multiValue;
-        console.log(selectedSeats)
-    }
-
-    onChange = (option) => {
-        // option.value     -->  "chocolate"
-        // option.label     -->  "Chocolate"
-        // option.extraInfo -->  "A"
-        return option;
-        console.log(option)
-      };
+        console.log(x)
+        console.log(indexList)
+        localStorage.setItem('SELECTEDSEATS', indexList);
+    };
     
     componentDidMount() {
         const id = window.localStorage.getItem('ID')
@@ -110,8 +141,11 @@ class showFlightDescription extends Component {
     };
 
     render() {
-
+        const { selectedOption } = this.state;
         const flight = this.state.flight;
+
+        localStorage.setItem('PRICE', flight.Price * (window.localStorage.getItem('SELECTEDSEATS').split(',').length));
+
         const x = window.localStorage.getItem('SEATSARRAY')
         const seatsArray = x.split(',')
         var seatsList = [];
@@ -177,17 +211,19 @@ class showFlightDescription extends Component {
                     isMulti
                     isSearchable={false}
                     name="seats"
+                    styles={customStyles}
+                    value={selectedOption}
                     options={seatsList}
                     className="basic-multi-select"
                     closeMenuOnSelect={false}
                     classNamePrefix="select"
-                    onChange={this.onChange}
+                    onChange={this.handleChange}
                 />
             </td>
         </tr>
         <tr>
             <td>Price:</td>
-            <td>{ flight.Price }</td>
+            <td>{ flight.Price * window.localStorage.getItem('SELECTEDSEATS').split(',').length }</td>
         </tr>
         </tbody>
         </table>
@@ -197,27 +233,27 @@ class showFlightDescription extends Component {
 
         <>
         <Navbar sticky="top" bg="light" variant="light">
-            <Navbar.Brand align="left" href="/">
-                <img
-                    alt=""
-                    src="/logo.svg"
-                    width="30"
-                    height="30"
-                    className="d-inline-block align-top"
-                />{' '}
-                Boojoo's Flight Reservation System
-            </Navbar.Brand>
-            <Nav className="me-auto">
-                <Nav.Link href="/">Home</Nav.Link>
-                <Nav.Link href="/reservations">Reservations</Nav.Link>
-            </Nav>
-            <Navbar.Toggle />
-            <Navbar.Collapse className="justify-content-end">
-            <Navbar.Text>
-                <a href="/viewUser">User Profile</a>
-            </Navbar.Text>
-            </Navbar.Collapse>
-        </Navbar>
+        <Navbar.Brand align="left" href="/">
+           {/* <img
+                alt=""
+                src="/logo.png"
+                width="30"
+                height="30"
+                className="d-inline-block align-top"
+           />{' '} */}
+            Boojoo's Flight Reservation System
+        </Navbar.Brand>
+        <Nav className="me-auto">
+            <Nav.Link href="/">Home</Nav.Link>
+            <Nav.Link href="/reservations">Reservations</Nav.Link>
+        </Nav>
+        <Navbar.Toggle />
+        <Navbar.Collapse className="justify-content-end">
+        <Navbar.Text>
+            <a href="/viewUser">User Profile</a>
+        </Navbar.Text>
+        </Navbar.Collapse>
+    </Navbar>  
 
         <div className="ShowBookDetails">
             <div className="container">

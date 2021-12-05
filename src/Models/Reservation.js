@@ -12,7 +12,7 @@ const ReservationSchema = new Schema({
     },
     SeatNumber:{
         type:[String],
-        required : false
+        required : true
     },
     Price:{
         type:Number,

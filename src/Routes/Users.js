@@ -108,18 +108,24 @@ router.get('/:Email/SearchFlight/:searchTerm', async(req,res)=>{
     if(allUsers.AdminPrivilieges = "True") {
         keyWord = req.params.searchTerm
         //console.log(keyWord);
+        allFlightsx = await Flight.find()
+        // for(var i = 0; i < allFlightsx.length; i){
+        //     parseInt(allFlightsx[1].Seats);
+        //     allFlightsx[i].save().then(Flight => res.json(Flight))
+        // }; 
         allFlights = await Flight.find({$or: 
             [{Code: keyWord}, 
+            {Seats: {$gte: keyWord}}, 
             {Arrival: keyWord}, 
             {Airport: keyWord}, 
             {Departure: keyWord}, 
             {Date: keyWord}, 
-            {BusniessSeats: keyWord},
-            {EcoSeats: keyWord},
+            {Cabin: keyWord},
+            {Baggage: keyWord},
             {From: keyWord},
             {TripDuration: keyWord},
             {Price:keyWord},
-            {To: keyWord},   
+            {To: keyWord},  
             {Terminal: keyWord}]})
         console.log(allFlights)
         res.status(200).send(allFlights)

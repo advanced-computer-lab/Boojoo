@@ -4,62 +4,82 @@ import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import '../App.css';
 import axios from 'axios';
-import Button from '@mui/material/Button';
-import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 
-const setId = (id) => {
-    console.log(id)
-    localStorage.setItem('ID', id);
-}
 
-
-class showUserDetails extends Component {
+class showFlightDescription extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            user: {}
+            selectedOption: null,
+            flight: {},
         };
     }
 
-
-
+    
     componentDidMount() {
-        const id = window.localStorage.getItem('ID')
-        console.log(id);
+        const id = window.localStorage.getItem('IDDETAILS')
         axios
-            .get('http://localhost:8000/users/ViewUser/61a7a3d32ecf681ee765d77e')
+            .get(`http://localhost:8000/flights/ViewDetails/${id}`)
             .then(res => {
                 this.setState({
-                    user: res.data
+                    flight: res.data
                 })
             })
             .catch(err => {
-                console.log("Error from usertDescription");
+                console.log("Error from flightDescription");
             })
     };
 
     render() {
+        const flight = this.state.flight;
 
-        const user = this.state.user;
-        let UserItem = <div>
+        let FlightItem = <div>
         <table className="table table-hover table-dark">
         <tbody>
         <tr>
-            <td>First name:</td>
-            <td>{ user.FirstName }</td>
+            <td>Flight Code:</td>
+            <td>{ flight.Code }</td>
         </tr>
         <tr>
-            <td>Last name:</td>
-            <td>{ user.LastName }</td>
+            <td>Airport:</td>
+            <td>{ flight.Airport }</td>
         </tr>
         <tr>
-            <td>Email:</td>
-            <td>{ user.Email }</td>
+            <td>Terminal:</td>
+            <td>{ flight.Terminal }</td>
         </tr>
         <tr>
-            <td>Passport Number:</td>
-            <td>{ user.PassportNumber }</td>
+            <td>From:</td>
+            <td>{ flight.From }</td>
+        </tr>
+        <tr>
+            <td>To:</td>
+            <td>{ flight.To }</td>
+        </tr>
+        <tr>
+            <td>Date:</td>
+            <td>{ flight.Date }</td>
+        </tr>
+        <tr>
+            <td>Arrival Time:</td>
+            <td>{ flight.Arrival }</td>
+        </tr>
+        <tr>
+            <td>Departure Time:</td>
+            <td>{ flight.Departure }</td>
+        </tr>
+        <tr>
+            <td>Trip Duration:</td>
+            <td>{ flight.TripDuration }</td>
+        </tr>
+        <tr>
+            <td>Cabin Type:</td>
+            <td>{ flight.Cabin }</td>
+        </tr>
+        <tr>
+            <td>Baggage:</td>
+            <td>{ flight.Baggage }</td>
         </tr>
         </tbody>
         </table>
@@ -89,28 +109,26 @@ class showUserDetails extends Component {
             <a href="/viewUser">User Profile</a>
         </Navbar.Text>
         </Navbar.Collapse>
-        </Navbar>  
+    </Navbar>  
 
         <div className="ShowBookDetails">
             <div className="container">
                 <div className="row">
+                    <div className="col-md-10 m-auto">
+                        <br /> <br />
+                        <Link to="/reservations" className="btn btn-outline-warning float-left">
+                            back
+                        </Link>
+                    </div>
                     <br />
                     <div className="col-md-8 m-auto">
-                        <h1 className="display-4 text-center">Profile</h1>
+                        <h1 className="display-4 text-center">Flight Details</h1>
                         <hr /> <br />
                     </div>
                 </div>
                 <div>
-                    { UserItem }
+                    { FlightItem }
                 </div>
-                <div align="center">
-                    <div className="col-md-6">
-                        <Link to = {`/editUser/:${user._id}`}>
-                            <Button variant="outlined" size="large" onClick={() => setId(user._id)}>Edit</Button>
-                        </Link>
-                        <br />
-                    </div> 
-                </div> 
             </div>
         </div>
         </> 
@@ -118,4 +136,4 @@ class showUserDetails extends Component {
     }
 }
 
-export default showUserDetails;
+export default showFlightDescription;

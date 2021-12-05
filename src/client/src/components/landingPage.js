@@ -33,55 +33,53 @@ export default function MainFlight() {
         localStorage.setItem('SEATSARRAY',seatsArray);
     }
 
+    const handleTextSearch =(e)=>{
+        const searchTerm = e.currentTarget.value;
+        console.log(searchTerm);
+        axios.get(`http://localhost:8000/users/:Email/SearchFlight/${searchTerm}`).then((allFlights) => {
+            setFlightList(allFlights.data);
+        })
+        if(searchTerm == ""){
+            window.location.reload(false);
+        }
+    }
+
     return (
         <>
-{/*      <Navbar sticky="top" bg="light" variant="light">
-            <Navbar.Brand align="left" href="/">
-                <img
-                    alt=""
-                    src="/logo.svg"
-                    width="30"
-                    height="30"
-                    className="d-inline-block align-top"
-                />{' '}
-                Boojoo's Flight Reservation System
-            </Navbar.Brand>
-            <Nav className="me-auto">
+        <Navbar sticky="top" bg="light" variant="light">
+        <Navbar.Brand align="left" href="/">
+           {/* <img
+                alt=""
+                src="/logo.png"
+                width="30"
+                height="30"
+                className="d-inline-block align-top"
+           />{' '} */}
+            Boojoo's Flight Reservation System
+        </Navbar.Brand>
+        <Nav className="me-auto">
             <Nav.Link href="/">Home</Nav.Link>
             <Nav.Link href="/reservations">Reservations</Nav.Link>
-            <Navbar.Collapse className="justify-content-end">
-                <Navbar.Text>
-                    Signed in as: <a href="#login">Mark Otto</a>
-                </Navbar.Text>
-            </Navbar.Collapse>
-            </Nav>
-    </Navbar> */}
-
-        <Navbar sticky="top" bg="light" variant="light">
-            <Navbar.Brand align="left" href="/">
-                <img
-                    alt=""
-                    src="/logo.svg"
-                    width="30"
-                    height="30"
-                    className="d-inline-block align-top"
-                />{' '}
-                Boojoo's Flight Reservation System
-            </Navbar.Brand>
-            <Nav className="me-auto">
-                <Nav.Link href="/">Home</Nav.Link>
-                <Nav.Link href="/reservations">Reservations</Nav.Link>
-            </Nav>
-            <Navbar.Toggle />
-            <Navbar.Collapse className="justify-content-end">
-            <Navbar.Text>
-                <a href="/viewUser">User Profile</a>
-            </Navbar.Text>
-            </Navbar.Collapse>
-        </Navbar>
+        </Nav>
+        <Navbar.Toggle />
+        <Navbar.Collapse className="justify-content-end">
+        <Navbar.Text>
+            <a href="/viewUser">User Profile</a>
+        </Navbar.Text>
+        </Navbar.Collapse>
+    </Navbar>  
         
         <div className="ShowBookList">
         <h2 align="center">Upcomming Flights</h2>
+        <div>
+            <input
+            className="form-group"
+            type="search"
+            placeholder="Search"
+            name="searchTerm"
+            onChange={handleTextSearch}
+            ></input>
+        </div>
         <TableContainer component={Paper} >
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead >

@@ -12,6 +12,7 @@ import ViewUser from './components/viewUser';
 import EditUser from './components/editUser';
 import ViewReturnFlights from './components/viewReturnFlights'
 import ReturnFlightDescription from './components/returnFlightDescription'
+import Details from './components/details'
 
 class App extends Component {
   render() {
@@ -20,6 +21,7 @@ class App extends Component {
         <div>
           <Routes>
             <Route exact path='/' element={<MainPage/>}/>
+            <Route exact path='/details/:id' element={<Details/>}/>
             <Route exact path='/returnFlightDescription/:id' element={<ReturnFlightDescription/>}/>
             <Route exact path='/viewUser' element={<ViewUser/>}/>
             <Route exact path='/viewReturnFlights/:id' element={<ViewReturnFlights/>}/>

@@ -20,10 +20,35 @@ export default function ViewReturnFlight() {
 
     const [flightList, setFlightList] = useState([]);
 
+    const handleTextSearch =(e)=>{
+        const searchTerm = e.currentTarget.value;
+        console.log(searchTerm);
+        axios.get(`http://localhost:8000/users/:Email/SearchFlight/${searchTerm}`).then((allFlights) => {
+            setFlightList(allFlights.data);
+        })
+        if(searchTerm == ""){
+            window.location.reload(false);
+        }
+    }
+
     useEffect(() =>{
         const id = window.localStorage.getItem('ID')
         axios.get(`http://localhost:8000/flights/ViewDeparture/${id}`).then((allFlights) => {
+            console.log(allFlights);
             setFlightList(allFlights.data);
+            if(allFlights.data.length == 0){
+                confirmAlert({
+                    customUI: () => {
+                        return (
+                            <div>
+                                <h1>There is no available return flights</h1>
+                            </div>
+                        );
+                    },
+                    closeOnEscape: true,
+                    closeOnClickOutside: true,
+                });
+            }
         })
     }, [])
 
@@ -61,7 +86,18 @@ export default function ViewReturnFlight() {
         <Link to={`/flightDescription/${window.localStorage.getItem('ID')}`} className="btn btn-outline-warning float-left">
             Departure Flight Description
         </Link>
+        <br/>
+        <br/>
         <h2 align="center">Available Return Flights</h2>
+        <div>
+            <input
+            className="form-group"
+            type="search"
+            placeholder="Search"
+            name="searchTerm"
+            onChange={handleTextSearch}
+            ></input>
+        </div>
         <TableContainer component={Paper} >
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead >

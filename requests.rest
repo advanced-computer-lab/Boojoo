@@ -2,7 +2,7 @@ POST http://localhost:8000/flights/abdo@gmail.com/CreateFlight
 content-type: application/json
 
 {
-"Code": "B1", "Airport": "qahera", "Date": "This date", "Terminal": "3", "Available": true,  "Arrival": "el sbt el sob7", "Departure": " bleel","From":"qahera", "To":"ismailia",  "Price":"1500","TripDuration":"sa3a","Seats":15,"Cabin":"Busniess","Baggage":"25"
+"Code": "A2", "Airport": "qahera", "Date": "tomorrow", "Terminal": "3", "Available": true,  "Arrival": "el sbt el sob7", "Departure": " bleel","From":"Tahrir", "To":"rehab",  "Price":"1500","TripDuration":"sa3a","Seats":15,"Cabin":"Busniess","Baggage":"25"
 }
 
 ###
@@ -59,4 +59,8 @@ content-type: application/json
 
 ###
 GET http://localhost:8000/flights/ViewDeparture/61aa38ac929ec369a75a1936
+content-type: application/json
+
+###
+DELETE http://localhost:8000/flights/CancelReservation/61acd0b6169681a5026f0183
 content-type: application/json

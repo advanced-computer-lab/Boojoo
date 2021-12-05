@@ -14,6 +14,7 @@ class ShowReservationList extends Component {
     };
   }
 
+
   componentDidMount() {
     axios
       .get('http://localhost:8000/flights/viewReservations')
@@ -40,18 +41,25 @@ class ShowReservationList extends Component {
       );
     }
 
+    if(window.localStorage.getItem('ISDELETED') == true){
+      window.location.reload(false);
+      localStorage.setItem('ISDELETED', false);
+      console.log()
+    }
+
+
     return (
         
         <>
         <Navbar sticky="top" bg="light" variant="light">
         <Navbar.Brand align="left" href="/">
-            <img
+           {/* <img
                 alt=""
-                src="/logo.svg"
+                src="/logo.png"
                 width="30"
                 height="30"
                 className="d-inline-block align-top"
-            />{' '}
+           />{' '} */}
             Boojoo's Flight Reservation System
         </Navbar.Brand>
         <Nav className="me-auto">
