@@ -50,29 +50,36 @@ router.post('/:Email/CreateFlight', async (req, res) => {
 router.get('/ViewDeparture/:id',async(req,res)=>{
     const Flighty = await Flight.findById(req.params.id);
     allFlights = await Flight.find();
+    allFlightsx = await Flight.find();
     allFlights = allFlights.filter(F=>F.To==Flighty.From);
-    if(allFlights!=null){
-        try{
-            res.send(allFlights);}
-        catch{
-            res.status(400).send("There is no Departure Flights");
-        }
+    allFlightsx = allFlightsx.filter(F=>F.From==Flighty.To);
+    try{
+        if(allFlights!=null)
+        res.send(allFlights);
+        else if(allFlightsx!=null)
+        res.send(allFlightsx);
+    }
+    catch{
+        res.status(400).send("There is no departure Flights");
     }
     
 })
 
+//Reserve flight
 router.post('/ReserveFlight/:id', async(req,res) =>{
     const flighty = await Flight.findById(req.params.id);
     const Selected =req.body.SeatNumber;
+    console.log(Selected)
         try{
             //Create reservation
             console.log("l2")
             for(let i=0; i<Selected.length; i++){
                 console.log("x")
                 const index = parseInt(Selected[i]);
-                if(flighty.SeatsArray[index-1]!="Not-Available"){
+                if(flighty.SeatsArray[index-1]!="Not Available"){
+                    flighty.SeatsArray[index-1]="Not Available";
                     console.log(flighty.SeatsArray[index-1])
-                    flighty.SeatsArray[index-1]="Not Available";}
+                }
                 else{   
                     console.log("z")
                     res.status(400).send("Couldn't reserve Seat");
@@ -81,45 +88,76 @@ router.post('/ReserveFlight/:id', async(req,res) =>{
             console.log("1")
             const newReservation =new Reservation({Attendant:req.body.Attendant,
             Tickety:req.body.Tickety,SeatNumber:req.body.SeatNumber,Price:req.body.Price});
-            newReservation.save().then(Reservation => res.json(Reservation));
+            await newReservation.save().then(Reservation => res.json(Reservation));
             flighty.Seats-=parseInt(Selected.length);
             if(flighty.Seats==0){
                 flighty.Available="false";
             }
             console.log("@");
-            console.log(parseInt(flighty.Seats));
-            console.log(parseInt(Selected.length));
-        
+            await flighty.save().then(Flight => res.json(Flight));
         }
         catch{
-            res.status(200).send("Connection timed out");
+            console.log("Allo");
         }
 })
 
 
 router.delete('/CancelReservation/:id', async(req,res)=>{
+    try{
+    const Reservationy= await Reservation.findById(req.params.id);
+    console.log('xxxxxx'+ Reservationy +'xxxxxx');
+    Ticket = await Reservationy.Tickety;
+    const flighty = await Flight.findById(Ticket);
+    Seaty = await Reservationy.SeatNumber;
+    console.log(Seaty);
+    console.log(Seaty.length)
+    for(let i=0; i<Seaty.length; i++){
+        console.log("x")
+        const index = parseInt(Seaty[i])
+        flighty.SeatsArray[index-1]='Seat:'+ [index];}
+    console.log(Seaty.length)
+    var flightys = parseInt(flighty.Seats);
+    await(flightys += Seaty.length);
+    await (flighty.Seats = flightys);
+    console.log(flightys)
+    flighty.Available = true;  
+    await flighty.save().then(Flight => res.json(Flight));
     await Reservation.findById(req.params.id)
     .then(Reservation => Reservation.remove().then(() => res.json({ success: true })))
-    .catch(err => res.status(404).json({ sucess: false }));
-    // const Reservationy=Reservation.findById(req.params.id);
-    // const Ticket = Reservationy.Tickety;
-    // const Seaty = Reservationy.SeatNumber;
-    //  Ticket.SeatsArray[Seaty+1]=0;
-    // Ticket.Seats +=1;
-    // Ticket.Available = True;  
+    // await Reservation.findById(req.params.id)
+    // .then(Reservation => Reservation.remove().then(() => res.json({ success: true })))
+    // .catch(err => res.status(404).json({ sucess: false }));
+    }
+    
+    catch{
+        console.log("Error")
+    }
+
+    
 });
 
 router.get('/viewReservations', async (req, res) => {
         try {
             const allReservations = await Reservation.find();
-            const My = await Reservation.Tickety;
-            const all = await 
-            res.status(200).json(allReservations.Attendant,allReservations.Tickety,allReservations.SeatNumber);
+            //const My = await Reservation.Tickety;
+            //const all = await 
+            res.status(200).json(allReservations);
         } 
         catch (error) {
             res.status(404).json({noReservationFound: 'No Reservations found'});
         }
 });
+
+// router.put('/EditReservation/:id',async(req,res)=>{
+//     try{
+//         const allReservations = await Reservation.findById(req.params.id);
+//         await allReservations.updateOne({"SeatNumber":req.body.SeatNumber});
+//         await allReservations.save().then(Reservation => res.json(Reservation));
+//     }
+//     catch{
+//         res.status(400).send("Please Choose Valid Seats");
+//     }
+// })
 
 
 

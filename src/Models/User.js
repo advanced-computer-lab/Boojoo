@@ -17,7 +17,7 @@ const UserSchema = new Schema({
     },
     PassportNumber:{
         type:String,
-        required:false
+        required:true
     },
     FirstName:{
         Type:String,
@@ -29,8 +29,22 @@ const UserSchema = new Schema({
     },
     Cart:{
         Type:Array,
-        default:[]
+        default:[],
+        required : false
+    },
+    Address:{
+        Type:String,
+        required:false
+    },
+    CountryCode:{
+        Type:Number,
+        required:false
+    },
+    Telephone:{
+        Type:Number,
+        required:false
     }
+
 });
 
 module.exports = User = mongoose.model('User', UserSchema);

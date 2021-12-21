@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const userController = require('./Routes/Users.js');
 const flightController = require('./Routes/Flights.js')
 const cors = require('cors');
+//const stripe = require('stripe')(process.env.STRIPE_PRIVATE_KEY)  
 
 //App variables
 const app = express();
@@ -14,9 +15,11 @@ app.use(express.urlencoded({extended: true}));
 app.use(express.json()) // To parse the incoming requests with JSON payloads// configurations
 app.use('/users', userController);
 app.use('/flights', flightController);
+// app.use('Mailer', mailerController);
+
 
 // Mongo DB
-const CONNECTION_URL = "mongodb+srv://dbBeedo:dbBeedo123456@skillsbuild-cluster.yzjwp.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+const CONNECTION_URL = "mongodb+srv://abdohany:boody1998@cluster0.o1odx.mongodb.net/AbdoDb?retryWrites=true&w=majority";
 mongoose.connect(CONNECTION_URL, { useNewUrlParser: true, useUnifiedTopology: true })
 .then(result =>console.log("MongoDB is now connected") )
 .catch(err => console.log(err));

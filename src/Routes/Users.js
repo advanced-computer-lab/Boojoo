@@ -3,47 +3,87 @@ const router = express.Router();
 const User = require('../Models/User.js');
 const Flight = require('../Models/Flight.js');
 const Admin = require('../Models/Admin.js');
-const Reservation = require("../Models/Reservation.js");
-
+const Reservation = require('../Models/Reservation.js');
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 
 
 //Sign up as a guest user
 router.post('/register', async (req, res) => {
-    allUser = await User.find();
-    allUser = allUser.filter(u => u.Email.toString() == req.body.Email.toString());
+    const body = req.body;
+    allUser = await User.findOne({Email:body.Email});
+    
     // console.log(user);
-    if (allUser.length > 0) {
+    if (allUser!=null) {
 
         res.status(300).send({ err: "Email already exists!!!" });
         return;
     }
     else{
-        const newUser = User(req.body);
-    newUser.save().then(User => res.json(User));
-    }
-});
+    //     const newUser = User({Email:req.body.Email,Password:req.body.Password,PassportNumber:req.body.PassportNumber});
+    // newUser.save().then(User => res.json(User));
+    const user = new User(body);
+    // generate salt to hash password
+    const salt = await bcrypt.genSalt(10);
+    // now we set user password to hashed password
+    user.Password = await bcrypt.hash(user.Password, salt);
+    user.save().then((doc) => res.status(201).send(doc));
+}
+  });
+    
 
+// async function generateJWT(username) {
+//     try {
+//       const payload = { username };
+//       const token = await jwt.sign(payload, process.env.JWT_SECRET, options);
+//       return { error: false, token };
+//     } catch (error) {
+//       return { error: true };
+//     }
+//   }
 //Sign in as a user
-router.post('/Signin', async (req, res) => {
-    console.log('Test sign')
-    allUsers = await User.find();
-    allUsers = allUsers.filter(u => u.Email.toString() == req.body.Email);
+// router.post('/Signin', async (req, res) => {
+//     console.log('Test sign')
+//     allUsers = await User.find();
+//     allUsers = allUsers.filter(u => u.Email.toString() == req.body.Email);
 
-    if (allUsers.length > 0) {
-        if (allUsers[0]['Password'] == req.body.Password) {
-            const token =jwt.sign({ foo: req.username }, 'shhhhh');
-            res.json({token, _id:allUsers._id});
+//     if (allUsers.length > 0) {
+//         if (allUsers[0]['Password'] == req.body.Password) {
+//             const token =jwt.sign({ foo: req.username }, 'shhhhh');
+//             res.json({token, _id:allUsers._id});
+//             console.log(token);
         
-        }
-        else{
-            res.status(300).send({err:"Your credentials could not be verified!"});
-        }
-    }
-    else{
-        res.status(300).send({err:"SignUp Instead"});
-    }
+//         }
+//         else{
+//             res.status(300).send({err:"Your credentials could not be verified!"});
+//         }
+//     }
+//     else{
+//         res.status(300).send({err:"SignUp Instead"});
+//     }
+    
+   
+// });
 
-});
+router.post("/login", async (req, res) => {
+    const body = req.body;
+    const user = await User.findOne({ Email: body.Email });
+
+    if (user) {
+      // check user password with hashed password stored in the database
+      const validPassword = await bcrypt.compare(body.Password, user.Password);
+      if (validPassword) {
+        const token =jwt.sign({ foo: req.username }, 'shhhhh');
+        res.status(200).json({ message: "Valid password" ,token, _id:user._id});
+        console.log(token);
+      } else {
+        res.status(400).json({ error: "Invalid Password" });
+      }
+    } else {
+      res.status(401).json({ error: "User does not exist" });
+    }
+  });
+
 
 //view user Details
 router.get('/ViewUser/:id', async (req,res) => {
@@ -139,6 +179,19 @@ router.put('/EditProfile/:id',async(req,res)=>{
         "LastName": req.body.LastName,"PassportNumber": req.body.PassportNumber});
     }
 
+})
+
+router.put('/ChangePassword/:id',async(req,res)=>{
+    allusers = await User.find();
+    allusers = allusers.filter(u => u.Email.toString() == req.body.Email);
+    if (allUsers.length > 0) {
+         if (allUsers[0]['Password'] == req.body.Password) {
+             await allusers.updateOne({"Password": req.body.Password})
+         }
+         else{
+            res.status(400).send("Please Enter Your Password Correctly")
+         }
+        }
 })
 
 module.exports = router;

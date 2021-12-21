@@ -51,7 +51,7 @@ const FlightSchema = new Schema({
         required:false
     },
     Seats:{
-        type:Number,
+        type:String,
         required:false
     },
     Cabin:{
@@ -62,6 +62,6 @@ const FlightSchema = new Schema({
         type:String,
         required:false
     } 
-});
+}); 
 
 module.exports = Flight = mongoose.model('Flight', FlightSchema);
