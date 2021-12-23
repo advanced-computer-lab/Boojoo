@@ -148,6 +148,17 @@ router.get('/viewReservations', async (req, res) => {
         }
 });
 
+// router.put('/EditReservation/:id',async(req,res)=>{
+//     try{
+//         const allReservations = await Reservation.findById(req.params.id);
+//         await allReservations.updateOne({"SeatNumber":req.body.SeatNumber});
+//         await allReservations.save().then(Reservation => res.json(Reservation));
+//     }
+//     catch{
+//         res.status(400).send("Please Choose Valid Seats");
+//     }
+// })
+
 
 
 

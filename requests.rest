@@ -1,66 +1,109 @@
+POST http://localhost:8000/Flights/abdo@gmail.com/CreateFlight 
+content-type: application/json
+
+{
+"Code": "A21", "Airport": "ghard2a", "Date": "26-11", "Terminal": 14, "Available": true, "Arrival": "3", "Departure": " bleel", "From":"cairo", "To":"ghard2a", "Price":"1500", "TripDuration":"sa3a", "Seats":15, "Cabin":"Busniess", "Baggage":25
+}
+
+###
+ POST http://localhost:8000/Users/register 
+ content-type: application/json
+
+{ "Email":"abdo@gmail.com", "Password":"12345678", "AdminPrivilieges":true }
+
+###
+ POST http://localhost:8000/Users/register 
+ content-type: application/json
+
+{ "Email":"abdo@gmail.com", "Password":"12345678", "AdminPrivilieges":true }
+
+###
+ POST http://localhost:8000/Flights/ReserveFlight/61a7de95e72de568dcba8c9e 
+ Content-Type: application/json
+
+{
+"Attendant":"61a34b15823f448512d6e02d", "Tickety":"61a7de95e72de568dcba8c9e", "SeatNumber":[2,4,6]
+}
+
+###
+ DELETE http://localhost:8000/Flights/CancelReservation/61a7a7fac4d5268405f548d2 
+ Content-Type: application/json
+
+###
+ GET http://localhost:8000/Flights/ViewDeparture/61a7dc82c8b9945890aa71d6 
+ Content-Type: application/json
+
+###
+ GET http://localhost:8000/Flights/viewReservations 
+ Content-Type: application/json
+
+ 
+###
 POST http://localhost:8000/flights/abdo@gmail.com/CreateFlight 
 content-type: application/json
 
-{
-"Code": "A2", "Airport": "qahera", "Date": "tomorrow", "Terminal": "3", "Available": true,  "Arrival": "el sbt el sob7", "Departure": " bleel","From":"Tahrir", "To":"rehab",  "Price":"1500","TripDuration":"sa3a","Seats":15,"Cabin":"Busniess","Baggage":"25"
-}
+{ "Code": "A2", "Airport": "qahera", "Date": "tomorrow", "Terminal": "3", "Available": true, "Arrival": "el sbt el sob7", "Departure": " bleel","From":"Tahrir", "To":"rehab", "Price":"1500","TripDuration":"sa3a","Seats":15,"Cabin":"Busniess","Baggage":"25" }
 
 ###
-POST http://localhost:8000/Users/register
-content-type: application/json
+ POST http://localhost:8000/Users/register 
+ Content-type: application/json
 
-{
-"FirstName":"Abdo",
-"LastName":"Boojoo",    
-"Email":"abdo@gmail.com",
-"Password":"12345678",
-"AdminPrivilieges":true
-}
+{ "FirstName":"Abdo", "LastName":"Boojoo", "Email":"abdo@gmail.com", "Password":"12345678", "AdminPrivilieges":true }
 
 ###
-POST http://localhost:8000/Users/register
-content-type: application/json
+ POST http://localhost:8000/Users/register content-type: application/json
 
-{
-"Email":"abdo@gmail.com",
-"Password":"12345678",
-"AdminPrivilieges":true
-}
+{ "Email":"abdo@gmail.com", "Password":"12345678", "AdminPrivilieges":true }
 
 ###
-POST http://localhost:8000/flights/ReserveFlight/61aba9d34809634a75fcb9d9
-content-type: application/json
+ POST http://localhost:8000/flights/ReserveFlight/61aba9d34809634a75fcb9d9 
+ Content-type: application/json
 
-{
-	"Attendant": "61aa220071b586f5675be382",
-	"Tickety": "61aba9d34809634a75fcb9d9",
-	"SeatNumber": ["7","8","9"]
-}
+{ "Attendant": "61aa220071b586f5675be382", "Tickety": "61aba9d34809634a75fcb9d9", "SeatNumber": ["7","8","9"] }
 
 ###
-PUT http://localhost:8000/Users/EditProfile/61a7a3d32ecf681ee765d77e
-content-type: application/json
+ PUT http://localhost:8000/Users/EditProfile/61a7a3d32ecf681ee765d77e content-type: application/json
 
-{
-    "Email":"abdo@gmail.com",
-    "FirstName":"Alo",
-    "LastName":"Alo",
-    "PassportNumber":"Alo",
-    "Password":"12345678",
-}
+{ "Email":"abdo@gmail.com", "FirstName":"Alo", "LastName":"Alo", "PassportNumber":"Alo", "Password":"12345678", }
 
 ###
-GET  http://localhost:8000/flights/viewReservations
-content-type: application/json
+ GET http://localhost:8000/flights/viewReservations 
+ Content-type: application/json
 
 {
 
 }
 
 ###
-GET http://localhost:8000/flights/ViewDeparture/61aa38ac929ec369a75a1936
-content-type: application/json
+ GET http://localhost:8000/flights/ViewDeparture/61aa38ac929ec369a75a1936 
+ Content-type: application/json
 
 ###
-DELETE http://localhost:8000/flights/CancelReservation/61acd0b6169681a5026f0183
-content-type: application/json
+ DELETE http://localhost:8000/flights/CancelReservation/61acd0b6169681a5026f0183 
+ Content-type: application/json
+
+###
+ POST http://localhost:8000/Users/Register/ 
+ Content-Type: application/json
+
+{
+"Email":"Abdo", "Password":"14567","AdminPrivilieges":false, "PassportNumber":"1001001","FirstName":"zy","LastName":"ay","Address":"he","CountryCode":12,
+"Telephone":11
+}
+
+### 
+POST http://localhost:8000/Users/login/ 
+Content-Type: application/json
+
+{
+"Email":"Abdo", "Password":"14567"
+}
+
+### 
+PUT http://localhost:8000/Users/ChangePassword/61c4b0a7e088faab4a4802e8
+Content-Type: application/json
+
+{
+"OldPassword":"14567",
+"NewPassword":"1234567"
+}
