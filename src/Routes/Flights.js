@@ -5,7 +5,7 @@ const Flight = require('../Models/Flight.js');
 const Reservation = require('../Models/Reservation.js');
 
 //view Available flights
-router.get('/ViewAvailableFlights', async (req, res) => {
+router.get('/ViewAvailableFlights', authenticateToken, async (req, res) => {
         allFlights = await Flight.find();
         if(allFlights = allFlights.filter(u => u.Available == true)){
             try{
@@ -18,7 +18,7 @@ router.get('/ViewAvailableFlights', async (req, res) => {
 });
 
 //view flight Details
-router.get('/ViewDetails/:id', async (req,res) => {
+router.get('/ViewDetails/:id', authenticateToken, async (req,res) => {
     Flighty = await Flight.findById(req.params.id);
     res.status(200).json(Flighty);
 })
@@ -147,6 +147,81 @@ router.get('/viewReservations', async (req, res) => {
             res.status(404).json({noReservationFound: 'No Reservations found'});
         }
 });
+
+function authenticateToken(req,res,next){
+    const authHeader = req.headers['authorization']
+    const token = authHeader && authHeader.split('')[1]
+    if(token==null)
+        return res.sendStatus(401)
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err,user)=>{
+        if(err) return res.sendStatus(403)
+        req.user = user
+        next()
+    })
+}
+
+router.put('/EditReservation/:id',async(req,res)=>{ 
+    const allReservations = await Reservation.findById(req.params.id);
+    const seataty = await allReservations.SeatNumber;
+    console.log(allReservations.SeatNumber)
+    const flighty = await Flight.findById(allReservations.Ticket);
+    console.log(allReservations)
+    try{
+        console.log("Y")
+        
+        console.log("Y1")
+        
+        const allReservations = await Reservation.findById(req.params.id);
+        Ticket = await allReservations.Tickety;
+        const flighty = await Flight.findById(Ticket);
+        Seaty = await allReservations.SeatNumber;
+        console.log(Seaty);
+        console.log(Seaty.length)
+        for(let i=0; i<Seaty.length; i++){
+            console.log("1")
+            const index = parseInt(Seaty[i])
+            flighty.SeatsArray[index-1]='Seat:'+ [index];
+        }
+
+        await allReservations.updateOne({"SeatNumber":req.body.SeatNumber});
+        console.log("Y2")
+        await allReservations.save().then(Reservation => res.json(Reservation));
+        console.log("z")
+    }
+    catch{
+        console.log("x")
+        res.status(400).send("Please Choose Valid Seats");
+    }
+    
+    for(let i=0; i<seataty.length; i++){
+        console.log("x")
+        const index = parseInt(seataty[i]);
+        if(flighty.seataty[index-1]!="Not Available"){
+            flighty.SeatsArray[index-1]="Not Available";
+            console.log(flighty.SeatsArray[index-1])
+        }
+        else{   
+            console.log("z")
+            res.status(400).send("Couldn't reserve Seat");
+        }
+    }
+        await flighty.save().then(Flight => res.json(Flight));
+})
+
+function isLoggedIn(req, res, next) {
+    if (req.isAuthenticated()) {
+      console.log('@@isLoggedIn req.isAuthenticated()=true');
+      req.session.isAuthenticated = true;
+      res.locals.isAuthenticated = true;
+      res.locals.user = req.user;
+      next(); //If you are authenticated, run the next
+    } else {
+      console.log('@@isLoggedIn req.isAuthenticated()=false');
+      return res.redirect("/login");
+    }
+  }
+
+
 
 
 

@@ -6,7 +6,7 @@ import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import '../App.css';
 import emailjs from "emailjs-com";
-import{ init } from 'emailjs-com';
+import{ init } from 'emailjs-com'; 
 
 const ReservationCard = (props) => {
 
@@ -90,6 +90,12 @@ const ReservationCard = (props) => {
         });
     }
 
+    const setId = (id) => {
+        console.log(id)
+        localStorage.setItem('IDDETAILS', id);
+        localStorage.setItem('RESERVATIONID', reservation._id);
+    }
+
     return(
         <div className="card-container-xlg">
             <div className="desc">
@@ -105,6 +111,11 @@ const ReservationCard = (props) => {
                         <Link to={`/details/${reservation.Tickety}`}>
                             <Button onClick={() => localStorage.setItem('IDDETAILS', reservation.Tickety)}>Flight Details </Button>
                         </Link>
+                    </div>
+                    <div padding="5" className="btn btn-outline-warning float">
+                        <Link to={`/editFlight/${reservation.Tickety}`}>
+                            <Button onClick={() => setId(reservation.Tickety)}>Edit Reservation</Button>
+                        </Link> 
                     </div>
                     <div padding="5" className="btn btn-outline-warning float">
                     <Button align="left" size="small" onClick={() => deletePopup(reservation._id)}>Cancel</Button>

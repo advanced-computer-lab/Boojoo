@@ -10,7 +10,7 @@ import 'react-confirm-alert/src/react-confirm-alert.css';
 
 const setId = (id) => {
     console.log(id)
-    localStorage.setItem('ID', id);
+    localStorage.setItem('ID', id); 
 }
 
 
@@ -28,7 +28,7 @@ class showUserDetails extends Component {
         const id = window.localStorage.getItem('ID')
         console.log(id);
         axios
-            .get('http://localhost:8000/users/ViewUser/61a7a3d32ecf681ee765d77e')
+            .get('http://localhost:8000/users/ViewUser/61c5f708377781808aad5894')
             .then(res => {
                 this.setState({
                     user: res.data
@@ -54,6 +54,18 @@ class showUserDetails extends Component {
             <td>{ user.LastName }</td>
         </tr>
         <tr>
+            <td>Address:</td>
+            <td>{ user.Address }</td>
+        </tr>
+        <tr>
+            <td>Country Code:</td>
+            <td>{ user.CountryCode }</td>
+        </tr>
+        <tr>
+            <td>Telephone:</td>
+            <td>{ user.Telephone }</td>
+        </tr>
+        <tr>
             <td>Email:</td>
             <td>{ user.Email }</td>
         </tr>
@@ -61,22 +73,22 @@ class showUserDetails extends Component {
             <td>Passport Number:</td>
             <td>{ user.PassportNumber }</td>
         </tr>
+        <tr>
+            <td>Password:</td>
+            <td>
+                <Link to={'/changePassword'} className="btn btn-outline-info btn-sm btn-block" >
+                    Change Password
+                </Link>
+            </td>
+        </tr>
         </tbody>
         </table>
         </div>
 
     return (
-
         <>
         <Navbar sticky="top" bg="light" variant="light">
         <Navbar.Brand align="left" href="/">
-           {/* <img
-                alt=""
-                src="/logo.png"
-                width="30"
-                height="30"
-                className="d-inline-block align-top"
-           />{' '} */}
             Boojoo's Flight Reservation System
         </Navbar.Brand>
         <Nav className="me-auto">

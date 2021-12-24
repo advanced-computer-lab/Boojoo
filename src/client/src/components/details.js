@@ -6,6 +6,10 @@ import '../App.css';
 import axios from 'axios';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 
+const setId = (id) => {
+    console.log(id)
+    localStorage.setItem('ID', id);
+}
 
 class showFlightDescription extends Component {
     constructor(props) {
@@ -15,6 +19,7 @@ class showFlightDescription extends Component {
             flight: {},
         };
     }
+    
 
     
     componentDidMount() {
@@ -129,6 +134,12 @@ class showFlightDescription extends Component {
                 <div>
                     { FlightItem }
                 </div>
+            </div>
+            <div className="col-md-6">
+                        <Link to={`/viewReturnFlights/${flight._id}`} className="btn btn-outline-info btn-lg btn-block" onClick={() => setId(flight._id)}>
+                            View Return Flights
+                        </Link>
+                        <br />
             </div>
         </div>
         </> 

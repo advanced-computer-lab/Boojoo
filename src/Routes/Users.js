@@ -4,45 +4,102 @@ const User = require('../Models/User.js');
 const Flight = require('../Models/Flight.js');
 const Admin = require('../Models/Admin.js');
 const Reservation = require("../Models/Reservation.js");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 
 
 //Sign up as a guest user
 router.post('/register', async (req, res) => {
-    allUser = await User.find();
-    allUser = allUser.filter(u => u.Email.toString() == req.body.Email.toString());
+    const body = await (req.body);
+    allUser = await User.findOne({Email:body.Email});
+    
     // console.log(user);
-    if (allUser.length > 0) {
+    if (allUser!=null) {
 
         res.status(300).send({ err: "Email already exists!!!" });
         return;
     }
     else{
-        const newUser = User(req.body);
-    newUser.save().then(User => res.json(User));
-    }
+    //     const newUser = User({Email:req.body.Email,Password:req.body.Password,PassportNumber:req.body.PassportNumber});
+    // newUser.save().then(User => res.json(User));
+    var usery = await body.Password;
+    // generate salt to hash password
+    const salt = await bcrypt.genSalt(10);
+    // now we set user password to hashed password
+    usery = await bcrypt.hash(usery, salt);
+    const user = new User({
+        Email: req.body.Email, Password: usery,  FirstName: req.body.FirstName, PassportNumber: req.body.PassportNumber,
+        LastName:req.body.LastName,Address:req.body.Address, CountryCode:req.body.CountryCode, Telephone:req.body.Telephone, 
+    })
+    await user.save().then(User => res.json(User));
+    }   
 });
 
-//Sign in as a user
-router.post('/Signin', async (req, res) => {
-    console.log('Test sign')
-    allUsers = await User.find();
-    allUsers = allUsers.filter(u => u.Email.toString() == req.body.Email);
+// async function generateJWT(username) {
+//     try {
+//       const payload = { username };
+//       const token = await jwt.sign(payload, process.env.JWT_SECRET, options);
+//       return { error: false, token };
+//     } catch (error) {
+//       return { error: true };
+//     }
+//   }
 
-    if (allUsers.length > 0) {
-        if (allUsers[0]['Password'] == req.body.Password) {
-            const token =jwt.sign({ foo: req.username }, 'shhhhh');
-            res.json({token, _id:allUsers._id});
-        
-        }
-        else{
-            res.status(300).send({err:"Your credentials could not be verified!"});
-        }
+router.post('/registerAdmin', async (req, res) => {
+    const body = await (req.body);
+    allAdmin = await Admin.findOne({Email:body.Email});
+    console.log('allo')
+    // console.log(user);
+    if (allAdmin!=null) {
+
+        res.status(300).send({ err: "Email already exists!!!" });
+        return;
     }
     else{
-        res.status(300).send({err:"SignUp Instead"});
-    }
+    //     const newUser = User({Email:req.body.Email,Password:req.body.Password,PassportNumber:req.body.PassportNumber});
+    // newUser.save().then(User => res.json(User));
+    var adminy = await body.Password;
+    // generate salt to hash password
+    const salt = await bcrypt.genSalt(10);
+    // now we set user password to hashed password
+    adminy = await bcrypt.hash(adminy, salt);
+    body.Password=adminy;
+    const admin = new Admin(req.body);
+    await admin.save().then(Admin => res.json(Admin));
+    }   
+});
 
+//login
+router.post("/login", async (req, res) => {
+    const body = req.body;
+    const user = await User.findOne({ Email: body.Email });
+    const admin = await Admin.findOne({Email:req.body.Email});
+    if (user) {
+      // check user password with hashed password stored in the database
+    const validPassword = await bcrypt.compare(body.Password, user.Password);
+    if (validPassword) {
+        const token =jwt.sign({ foo: req.username }, 'shhhhh');
+        res.status(200).json({ message: "Valid user password" ,token, _id:user._id});
+        console.log(token);
+    } else {
+        res.status(400).json({ error: "Invalid Password" });
+    }
+    }
+    else if(admin){
+        const validPasswordy = await bcrypt.compare(req.body.Password, admin.Password);
+    if (validPasswordy) {
+        const tokeny =jwt.sign({ foo: req.username }, 'shhhhh');
+        res.status(200).json({ message: "Valid admin password" ,tokeny, _id:admin._id});
+        console.log(tokeny);
+    }
+    else{
+        res.status(400).json({error:"Invalid Password"});
+        }
+    }
+    else {
+    res.status(401).json({ error: "User does not exist" });
+    }
 });
 
 //view user Details
@@ -135,16 +192,60 @@ router.get('/:Email/SearchFlight/:searchTerm', async(req,res)=>{
     }
 })
 
+//Edit profile
 router.put('/EditProfile/:id',async(req,res)=>{
     allUsers = await User.findById(req.params.id);
-    if(allUsers.AdminPrivilieges == "True"){
-        await allUsers.updateOne(req.body);
+    //console.log(req.body.PassportNumber)
+    //console.log(req.body.LastName)
+    //console.log(req.body.Address)
+    //console.log(req.body.Telephone)
+    //console.log(req.body.CountryCode)
+    await allUsers.updateOne({"Email": req.body.Email, "FirstName": req.body.FirstName,
+    "LastName": req.body.LastName,"PassportNumber": req.body.PassportNumber,"Address":req.body.Address,"CountryCode":req.body.CountryCode,
+    "Telephone":req.body.Telephone});
+})
+
+//Change password
+router.put('/ChangePassword/:id',async(req,res)=>{
+    allusers = await User.findById(req.params.id);
+    console.log(req.body.OldPassword)
+    console.log(req.body.NewPassword)
+    const validPassword = await bcrypt.compare(req.body.OldPassword, allusers.Password);
+    if (allusers!=null) {
+        if(validPassword){
+            var pass = await req.body.NewPassword;
+    // generate salt to hash password
+        const salt = await bcrypt.genSalt(10);
+    // now we set user password to hashed password
+        pass = await bcrypt.hash(pass, salt);
+                await allusers.updateOne({"Password": pass})
+                res.status(200).send("Password Changed Successfuly");
+        }
+        else{
+            res.status(400).send("Please Enter Your Old Password Correctly")
+        }
     }
     else{
-        await allUsers.updateOne({"Email": req.body.Email,"Password": req.body.Password, "FirstName": req.body.FirstName,
-        "LastName": req.body.LastName,"PassportNumber": req.body.PassportNumber});
-    }
-
+        res.status(401).json({ error: "User does not exist" });
+    }      
 })
+
+function authenticateToken(req,res,next){
+    const authHeader = req.headers['authorization']
+    const token = authHeader && authHeader.split('')[1]
+    if(token==null)
+        return res.sendStatus(401)
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err,user)=>{
+        if(err) return res.sendStatus(403)
+        req.user = user
+        next()
+    })
+}
+
+
+
+
+
+
 
 module.exports = router;

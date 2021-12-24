@@ -13,6 +13,9 @@ class EditUser extends Component {
     this.state = {
       FirstName: '',
       LastName: '',
+      Address:'',
+      CountryCode:'',
+      Telephone:'',
       PassportNumber: '',
       Email:'',        
     };
@@ -20,11 +23,14 @@ class EditUser extends Component {
 
   componentDidMount() {
     axios
-      .get('http://localhost:8000/users/ViewUser/61a7a3d32ecf681ee765d77e')
+      .get('http://localhost:8000/users/ViewUser/61c5f708377781808aad5894')
       .then(res => {
         this.setState({
             FirstName: res.data.FirstName,
             LastName: res.data.LastName,
+            Address: res.data.Address,
+            CountryCode: res.data.CountryCode,
+            Telephone: res.data.Telephone,
             PassportNumber: res.data.PassportNumber,
             Email: res.data.Email,
         })
@@ -38,8 +44,8 @@ class EditUser extends Component {
 
   editPopup = () => {
     confirmAlert({
-        title: "Delete Flight",
-        message: "Are you sure you want to permanently delete this flight?",
+        title: "Edit Info",
+        message: "Are you sure you want to permanently edit your info?",
         buttons: [
             {
                 label: "Yes",
@@ -64,6 +70,9 @@ class EditUser extends Component {
     const data = {
         FirstName: this.state.FirstName,
         LastName: this.state.LastName,
+        Address: this.state.Address,
+        CountryCode: this.state.CountryCode,
+        Telephone: this.state.Telephone,
         PassportNumber: this.state.PassportNumber,
         Email: this.state.Email,
     };
@@ -72,7 +81,7 @@ class EditUser extends Component {
         console.log(id);
         console.log(data)
         axios
-        .put('http://localhost:8000/users/EditProfile/61a7a3d32ecf681ee765d77e', data)
+        .put('http://localhost:8000/users/EditProfile/61c5f708377781808aad5894', data)
         .then(res => {
             this.props.history.push('/');
         })
@@ -83,7 +92,7 @@ class EditUser extends Component {
           customUI: () => {
               return (
                   <div>
-                      <h1>Edited User</h1>
+                      <h1>Edited Profile</h1>
                       <p align='center'>Success</p>
                   </div>
               );
@@ -157,6 +166,42 @@ class EditUser extends Component {
                         name='LastName'
                         className='form-control'
                         value={this.state.LastName}
+                        onChange={this.onChange}
+                      />
+                    </div>
+
+                    <div className='form-group'>
+                    <label htmlFor="Address">Address</label>
+                      <input
+                        type='text'
+                        placeholder='Country-City-District'
+                        name='Address'
+                        className='form-control'
+                        value={this.state.Address}
+                        onChange={this.onChange}
+                      />
+                    </div>
+
+                    <div className='form-group'>
+                    <label htmlFor="CountryCode">Country Code</label>
+                      <input
+                        type='number'
+                        placeholder='21500'
+                        name='CountryCode'
+                        className='form-control'
+                        value={this.state.CountryCode}
+                        onChange={this.onChange}
+                      />
+                    </div>
+
+                    <div className='form-group'>
+                    <label htmlFor="Telephone">Telephone</label>
+                      <input
+                        type='number'
+                        placeholder='01006688006'
+                        name='Telephone'
+                        className='form-control'
+                        value={this.state.Telephone}
                         onChange={this.onChange}
                       />
                     </div>

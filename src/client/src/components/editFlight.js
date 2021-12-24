@@ -47,6 +47,7 @@ const reserveFlight = (id) => {
     }
     else{
     console.log(seatNumberArray);
+    const reservationId = window.localStorage.getItem('RESERVATIONID');
     const data = {
         Attendant: '61a7a3d32ecf681ee765d77e',
         Tickety: id,
@@ -59,18 +60,6 @@ const reserveFlight = (id) => {
     axios
         .post(`http://localhost:8000/flights/ReserveFlight/${id}`, data)
         .then(res => {
-            confirmAlert({
-                customUI: () => {
-                    return (
-                        <div>
-                            <h1>Flight Reserved</h1>
-                            <p align='center'>Success</p>
-                        </div>
-                    );
-                },
-                closeOnEscape: true,
-                closeOnClickOutside: true,
-            });
         })
         .catch(err => {
             console.log("Error in Reserving flight");
@@ -80,12 +69,12 @@ const reserveFlight = (id) => {
 
 const reservePopup = _id => {
     confirmAlert({
-        title: "Reserve Flight",
-        message: "Are you sure you want to reserve this flight?",
+        title: "Edit Reservation",
+        message: "Are you sure you want to edit this reservation?",
         buttons: [
             {
                 label: "Yes",
-                onClick: () => reserveFlight(_id)
+                onClick: () => deleteReservation()
             },
             {
                 label: "No",
@@ -96,9 +85,25 @@ const reservePopup = _id => {
     }); 
 }
 
-const setId = (id) => {
-    console.log(id)
-    localStorage.setItem('ID', id);
+const deleteReservation = () => {
+    const reservationId = window.localStorage.getItem('RESERVATIONID');
+    const Id = window.localStorage.getItem('ID');
+    axios.delete(`http://localhost:8000/flights/CancelReservation/${reservationId}`)
+    .then( () => {
+        console.log("old deleted")
+        confirmAlert({
+            title: "Edit Reservation",
+            message: "Your reservation has been updated",
+            buttons: [
+                {
+                    label: "Okay",
+                    onClick: () => reserveFlight(Id) 
+                },
+            ],
+            closeOnEscape: false,
+            closeOnClickOutside: false,
+        });  
+    })
 }
 
 class showFlightDescription extends Component {
@@ -127,7 +132,7 @@ class showFlightDescription extends Component {
     };
     
     componentDidMount() {
-        const id = window.localStorage.getItem('ID')
+        const id = window.localStorage.getItem('IDDETAILS')
         axios
             .get(`http://localhost:8000/flights/ViewDetails/${id}`)
             .then(res => {
@@ -151,7 +156,7 @@ class showFlightDescription extends Component {
         var seatsList = [];
         seatsArray.forEach(function(element) {
             seatsList.push({ label:element, value: element })
-        }); 
+        });
 
         let FlightItem = <div>
         <table className="table table-hover table-dark">
@@ -260,13 +265,13 @@ class showFlightDescription extends Component {
                 <div className="row">
                     <div className="col-md-10 m-auto">
                         <br /> <br />
-                        <Link to="/" className="btn btn-outline-warning float-left">
-                            Flight List
+                        <Link to="/reservations" className="btn btn-outline-warning float-left">
+                            Back
                         </Link>
                     </div>
                     <br />
                     <div className="col-md-8 m-auto">
-                        <h1 className="display-4 text-center">Flight Details</h1>
+                        <h1 className="display-4 text-center">Edit Flight</h1>
                         <hr /> <br />
                     </div>
                 </div>
@@ -275,16 +280,10 @@ class showFlightDescription extends Component {
                 </div>
 
                 <div className="row">
-                    <div className="col-md-6">
+                    <div className="col-md-12">
                         <button className="btn btn-outline-info btn-lg btn-block" onClick={() => reservePopup(flight._id)}>Reserve Flight</button>
                         <br />
                     </div> 
-                    <div className="col-md-6">
-                        <Link to={`/viewReturnFlights/${flight._id}`} className="btn btn-outline-info btn-lg btn-block" onClick={() => setId(flight._id)}>
-                            View Return Flights
-                        </Link>
-                        <br />
-                    </div>
                 </div> 
 
             </div>

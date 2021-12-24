@@ -221,7 +221,7 @@ class showReturnFlightDescription extends Component {
         </tr>
         <tr>
             <td>Price:</td>
-            <td>{ flight.Price }</td>
+            <td>{ flight.Price * window.localStorage.getItem('SELECTEDSEATS').split(',').length }</td>
         </tr>
         </tbody>
         </table>

@@ -53,7 +53,7 @@ class ShowReservationList extends Component {
         <>
         <Navbar sticky="top" bg="light" variant="light">
         <Navbar.Brand align="left" href="/">
-           {/* <img
+          {/* <img
                 alt=""
                 src="/logo.png"
                 width="30"

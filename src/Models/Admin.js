@@ -13,7 +13,7 @@ const AdminSchema = new Schema({
     AdminPrivilieges:{
         type: Boolean,
         required: false,
-        default:false
+        default:true
     }
 });
 
