@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import '../App.css';
 import axios from 'axios';
 import Form from 'react-bootstrap/Form';
+import NavBar from './navbar';
 
 
 class CreateFlight extends Component {

@@ -15,6 +15,7 @@ import Paper from '@material-ui/core/Paper';
 import axios from 'axios';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
+import NavBar from './navbar';
 
 export default function ViewReturnFlight() {
 
@@ -59,28 +60,7 @@ export default function ViewReturnFlight() {
 
     return (
         <>
-        <Navbar sticky="top" bg="light" variant="light">
-            <Navbar.Brand align="left" href="/">
-                <img
-                    alt=""
-                    src="/logo.svg"
-                    width="30"
-                    height="30"
-                    className="d-inline-block align-top"
-                />{' '}
-                Boojoo's Flight Reservation System
-            </Navbar.Brand>
-            <Nav className="me-auto">
-                <Nav.Link href="/">Home</Nav.Link>
-                <Nav.Link href="/reservations">Reservations</Nav.Link>
-            </Nav>
-            <Navbar.Toggle />
-            <Navbar.Collapse className="justify-content-end">
-            <Navbar.Text>
-                <a href="/viewUser">User Profile</a>
-            </Navbar.Text>
-            </Navbar.Collapse>
-        </Navbar>
+        <NavBar/> 
         
         <div className="ShowBookList">
         <Link to={`/flightDescription/${window.localStorage.getItem('ID')}`} className="btn btn-outline-warning float-left">
@@ -89,11 +69,12 @@ export default function ViewReturnFlight() {
         <br/>
         <br/>
         <h2 align="center">Available Return Flights</h2>
-        <div>
+        <div className='form-group'>
+            <label htmlFor="Airport">Search:</label>
             <input
-            className="form-group"
+            className="form-control"
             type="search"
-            placeholder="Search"
+            placeholder="e.g. from, to, cabin, date, airport, baggage, duration, price, arrival time, departure time, etc.."
             name="searchTerm"
             onChange={handleTextSearch}
             ></input>

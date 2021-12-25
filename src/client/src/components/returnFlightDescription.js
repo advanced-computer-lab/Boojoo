@@ -9,6 +9,7 @@ import Paper from '@material-ui/core/Paper';
 import Button from '@mui/material/Button';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
+import NavBar from './navbar';
 
 const customStyles = {
     option: provided => ({
@@ -25,75 +26,13 @@ const customStyles = {
     })
   }
 
-const reserveFlight = (id) => {
-    //axios.post('http://localhost:8000/flights/ReserveFlight').then( () => {
-        //window.location.reload(false);
-    //})
+const reservePopup = _id => {
+    localStorage.setItem('FLIGHT', "returning")
     const seatNumberArray = window.localStorage.getItem('SELECTEDSEATS').split(',')
     if(seatNumberArray[0] == ''){
-        console.log('Please reserve a seat')
-        confirmAlert({
-            customUI: () => {
-                return (
-                    <div>
-                        <h1>Please select a seat </h1>
-                        <p>Error</p>
-                    </div>
-                );
-            },
-            closeOnEscape: true,
-            closeOnClickOutside: true,
-        });
+        alert('Please reserve an available seat');
+        //navigation.navigate(`flightDescription/${_id}`);
     }
-    else{
-    console.log(seatNumberArray);
-    const data = {
-        Attendant: '61a7a3d32ecf681ee765d77e',
-        Tickety: id,
-        SeatNumber: seatNumberArray,
-        Price: window.localStorage.getItem('PRICE')
-    };
-
-    console.log(data);
-
-    axios
-        .post(`http://localhost:8000/flights/ReserveFlight/${id}`, data)
-        .then(res => {
-            confirmAlert({
-                customUI: () => {
-                    return (
-                        <div>
-                            <h1>Flight Reserved</h1>
-                            <p align='center'>Success</p>
-                        </div>
-                    );
-                },
-                closeOnEscape: true,
-                closeOnClickOutside: true,
-            });
-        })
-        .catch(err => {
-            console.log("Error in Reserving flight");
-        })
-    }
-}
-
-const reservePopup = _id => {
-    confirmAlert({
-        title: "Reserve Flight",
-        message: "Are you sure you want to reserve this flight?",
-        buttons: [
-            {
-                label: "Yes",
-                onClick: () => reserveFlight(_id)
-            },
-            {
-                label: "No",
-            }
-        ],
-        closeOnEscape: true,
-        closeOnClickOutside: true,
-    });
 }
 
 class showReturnFlightDescription extends Component {
@@ -221,7 +160,7 @@ class showReturnFlightDescription extends Component {
         </tr>
         <tr>
             <td>Price:</td>
-            <td>{ flight.Price * window.localStorage.getItem('SELECTEDSEATS').split(',').length }</td>
+            <td>{ flight.Price * window.localStorage.getItem('SELECTEDSEATS').split(',').length }</td> 
         </tr>
         </tbody>
         </table>
@@ -230,28 +169,7 @@ class showReturnFlightDescription extends Component {
     return (
 
         <>
-        <Navbar sticky="top" bg="light" variant="light">
-        <Navbar.Brand align="left" href="/">
-           {/* <img
-                alt=""
-                src="/logo.png"
-                width="30"
-                height="30"
-                className="d-inline-block align-top"
-           />{' '} */}
-            Boojoo's Flight Reservation System
-        </Navbar.Brand>
-        <Nav className="me-auto">
-            <Nav.Link href="/">Home</Nav.Link>
-            <Nav.Link href="/reservations">Reservations</Nav.Link>
-        </Nav>
-        <Navbar.Toggle />
-        <Navbar.Collapse className="justify-content-end">
-        <Navbar.Text>
-            <a href="/viewUser">User Profile</a>
-        </Navbar.Text>
-        </Navbar.Collapse>
-    </Navbar>  
+        <NavBar/>  
 
         <div className="ShowBookDetails">
             <div className="container">
@@ -274,7 +192,9 @@ class showReturnFlightDescription extends Component {
 
                 <div>
                     <div align="center">
-                        <button className="btn btn-outline-info btn-lg btn-block" onClick={() => reservePopup(flight._id)}>Reserve Flight</button>
+                        <Link to={'/payment'} className="btn btn-outline-info btn-lg btn-block" onClick={() => reservePopup(flight._id)}>
+                            Reserve Flight
+                        </Link>
                         <br />
                     </div> 
                 </div> 

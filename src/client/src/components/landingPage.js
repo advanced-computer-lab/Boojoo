@@ -15,13 +15,31 @@ import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import NavBar from './navbar';
 
+const editPopup = () => {
+    confirmAlert({
+        customUI: () => {
+            return (
+                <div>
+                    <h1>Please Login First</h1>
+                </div>
+            );
+        },
+        closeOnEscape: true,
+        closeOnClickOutside: true,
+    });
+}
+
 export default function MainFlight() {
 
     const [flightList, setFlightList] = useState([]);
+    const [success, setSuccess ] = useState(true);
 
     useEffect(() =>{
         axios.get('http://localhost:8000/users/:Email/ViewAllFlights').then((allFlights) => {
             setFlightList(allFlights.data);
+            if(window.localStorage.getItem('token') !== null){
+                setSuccess(false);
+            }
         })
     }, [])
 
@@ -49,11 +67,12 @@ export default function MainFlight() {
         
         <div className="ShowBookList">
         <h2 align="center">Upcomming Flights</h2>
-        <div>
+        <div className='form-group'>
+            <label htmlFor="Airport">Search:</label>
             <input
-            className="form-group"
+            className="form-control"
             type="search"
-            placeholder="Search"
+            placeholder="e.g. from, to, cabin, date, airport, baggage, duration, price, arrival time, departure time, etc.."
             name="searchTerm"
             onChange={handleTextSearch}
             ></input>
@@ -100,9 +119,13 @@ export default function MainFlight() {
                     <TableCell align="center">{Flight.Seats}</TableCell>
                     <TableCell align="right">{Flight.Price}</TableCell>
                     <TableCell align="right">
+                        {success?
+                        <Button variant="outlined" size="small" onClick={() => editPopup()}>Details</Button>
+                        :
                         <Link to = {`flightDescription/${Flight._id}`}>
                         <Button variant="outlined" size="small" onClick={() => setId(Flight._id, Flight.Seats, Flight.SeatsArray)}>Details</Button>
                         </Link>
+                        }
                     </TableCell>
                 </TableRow>
                 ))}

@@ -7,6 +7,7 @@ import 'react-confirm-alert/src/react-confirm-alert.css';
 import '../App.css';
 import emailjs from "emailjs-com";
 import{ init } from 'emailjs-com'; 
+import NavBar from './navbar';
 
 const ReservationCard = (props) => {
 

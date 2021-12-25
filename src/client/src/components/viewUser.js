@@ -7,6 +7,7 @@ import axios from 'axios';
 import Button from '@mui/material/Button';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
+import NavBar from './navbar';
 
 const setId = (id) => {
     console.log(id)
@@ -25,10 +26,10 @@ class showUserDetails extends Component {
 
 
     componentDidMount() {
-        const id = window.localStorage.getItem('ID')
+        const id = window.localStorage.getItem('USERID')
         console.log(id);
         axios
-            .get('http://localhost:8000/users/ViewUser/61c5f708377781808aad5894')
+            .get(`http://localhost:8000/users/ViewUser/${id}`)
             .then(res => {
                 this.setState({
                     user: res.data
@@ -87,21 +88,7 @@ class showUserDetails extends Component {
 
     return (
         <>
-        <Navbar sticky="top" bg="light" variant="light">
-        <Navbar.Brand align="left" href="/">
-            Boojoo's Flight Reservation System
-        </Navbar.Brand>
-        <Nav className="me-auto">
-            <Nav.Link href="/">Home</Nav.Link>
-            <Nav.Link href="/reservations">Reservations</Nav.Link>
-        </Nav>
-        <Navbar.Toggle />
-        <Navbar.Collapse className="justify-content-end">
-        <Navbar.Text>
-            <a href="/viewUser">User Profile</a>
-        </Navbar.Text>
-        </Navbar.Collapse>
-        </Navbar>  
+        <NavBar/> 
 
         <div className="ShowBookDetails">
             <div className="container">

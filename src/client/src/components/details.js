@@ -5,6 +5,7 @@ import Nav from 'react-bootstrap/Nav';
 import '../App.css';
 import axios from 'axios';
 import 'react-confirm-alert/src/react-confirm-alert.css';
+import NavBar from './navbar';
 
 const setId = (id) => {
     console.log(id)
@@ -93,28 +94,7 @@ class showFlightDescription extends Component {
     return (
 
         <>
-        <Navbar sticky="top" bg="light" variant="light">
-        <Navbar.Brand align="left" href="/">
-           {/* <img
-                alt=""
-                src="/logo.png"
-                width="30"
-                height="30"
-                className="d-inline-block align-top"
-           />{' '} */}
-            Boojoo's Flight Reservation System
-        </Navbar.Brand>
-        <Nav className="me-auto">
-            <Nav.Link href="/">Home</Nav.Link>
-            <Nav.Link href="/reservations">Reservations</Nav.Link>
-        </Nav>
-        <Navbar.Toggle />
-        <Navbar.Collapse className="justify-content-end">
-        <Navbar.Text>
-            <a href="/viewUser">User Profile</a>
-        </Navbar.Text>
-        </Navbar.Collapse>
-    </Navbar>  
+        <NavBar/> 
 
         <div className="ShowBookDetails">
             <div className="container">
@@ -135,7 +115,7 @@ class showFlightDescription extends Component {
                     { FlightItem }
                 </div>
             </div>
-            <div className="col-md-6">
+            <div  className="col-md-6 m-auto">
                         <Link to={`/viewReturnFlights/${flight._id}`} className="btn btn-outline-info btn-lg btn-block" onClick={() => setId(flight._id)}>
                             View Return Flights
                         </Link>

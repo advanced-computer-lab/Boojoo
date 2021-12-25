@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import '../App.css';
 import axios from 'axios';
 import Form from 'react-bootstrap/Form';
+import NavBar from './navbar';
+import { confirmAlert } from 'react-confirm-alert';
 
 
 class LoginUser extends Component {
@@ -27,13 +29,24 @@ class LoginUser extends Component {
         };
     console.log(user)
     axios
-        .put('http://localhost:8000/users/ChangePassword/61c5f708377781808aad5894', user)
+        .put(`http://localhost:8000/users/ChangePassword/${window.localStorage.getItem('USERID')}`, user)
         .then(res => {
             this.setState({
                 OldPassword:'',
                 Password: '',
             })
-            //this.props.history.push('/');
+            confirmAlert({
+              customUI: () => {
+                  return (
+                      <div>
+                          <h1>Password Changed</h1>
+                          <p align='center'>Success</p>
+                      </div>
+                  );
+              },
+              closeOnEscape: true,
+              closeOnClickOutside: true,
+          });
         })
         .then(data => {
         })
@@ -42,6 +55,7 @@ class LoginUser extends Component {
     render() {
         return (
           <div className="CreateBook">
+            <NavBar/>
             <div className="container">
               <div className="row">
                 <div className="col-md-8 m-auto">
@@ -51,10 +65,7 @@ class LoginUser extends Component {
                   </Link>
                 </div>
                 <div className="col-md-8 m-auto">
-                  <h1 className="display-4 text-center">Login</h1>
-                  <p className="lead text-center">
-                      Please enter your credentials
-                  </p>
+                  <h1 className="display-4 text-center">Change Password</h1>
 
                   <form noValidate onSubmit={this.onSubmit}>
                     <div className='form-group'>

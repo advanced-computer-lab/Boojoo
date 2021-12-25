@@ -5,6 +5,7 @@ import axios from 'axios';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import Form from 'react-bootstrap/Form';
+import NavBar from './navbar';
 
 
 class RegisterUser extends Component {
@@ -75,6 +76,7 @@ class RegisterUser extends Component {
     render() {
         return (
           <div className="CreateBook">
+            <NavBar/> 
             <div className="container">
               <div className="row">
                 <div className="col-md-8 m-auto">

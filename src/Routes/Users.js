@@ -5,7 +5,8 @@ const Flight = require('../Models/Flight.js');
 const Admin = require('../Models/Admin.js');
 const Reservation = require("../Models/Reservation.js");
 const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
+const jwt = require("jsonwebtoken");  
+const { json } = require("node:stream/consumers");
 
 
 
@@ -81,24 +82,27 @@ router.post("/login", async (req, res) => {
     if (validPassword) {
         const token =jwt.sign({ foo: req.username }, 'shhhhh');
         res.status(200).json({ message: "Valid user password" ,token, _id:user._id});
-        console.log(token);
+        
+        //res.redirect('/');
     } else {
-        res.status(400).json({ error: "Invalid Password" });
+        res.status(400).json({ message: "Invalid Password" });
     }
     }
     else if(admin){
         const validPasswordy = await bcrypt.compare(req.body.Password, admin.Password);
+
     if (validPasswordy) {
-        const tokeny =jwt.sign({ foo: req.username }, 'shhhhh');
-        res.status(200).json({ message: "Valid admin password" ,tokeny, _id:admin._id});
-        console.log(tokeny);
+        const token =jwt.sign({ foo: req.username }, 'shhhhh');
+        res.status(200).json({ message: "Valid admin password" ,token, _id:admin._id});
+        
+        //res.redirect('/admin/view-flights');
     }
     else{
-        res.status(400).json({error:"Invalid Password"});
+        res.status(400).json({message:"Invalid Password"});
         }
     }
     else {
-    res.status(401).json({ error: "User does not exist" });
+    res.status(401).json({ message: "User does not exist" });
     }
 });
 
@@ -113,7 +117,7 @@ router.get('/ViewUser/:id', async (req,res) => {
 
 //View all Flights for admin
 router.get('/:Email/ViewAllFlights', async (req, res) => {
-    allUsers = await User.find();
+    allUsers = await Admin.find();
     allUsers = allUsers.filter(u=> u.Email.toString() == req.body.Email);
     if (allUsers.AdminPrivilieges = "True") {
         try {
@@ -131,7 +135,7 @@ router.get('/:Email/ViewAllFlights', async (req, res) => {
 
 //Update Flight
 router.put('/:Email/UpdateFlight/:id', async (req, res) => {
-    allUsers = await User.find();
+    allUsers = await Admin.find();
     allUsers = allUsers.filter(u=> u.Email.toString() == req.body.Email);
     if (allUsers.AdminPrivilieges = "True") {
         //Flight.findByIdAndUpdate(req.params.id, req.body)
@@ -140,6 +144,7 @@ router.put('/:Email/UpdateFlight/:id', async (req, res) => {
         //);
         flight = await Flight.findById(req.params.id);
         await flight.updateOne(req.body);
+        await flight.save().then(Flight => res.json(Flight));
     }
     else{
         res.status(404).send("User isn't Admin !!");
@@ -148,7 +153,7 @@ router.put('/:Email/UpdateFlight/:id', async (req, res) => {
 
 //Delete Flight
 router.delete('/:Email/DeleteFlight/:id',async(req,res)=>{
-    allUsers = await User.find();
+    allUsers = await Admin.find();
     allUsers = allUsers.filter(u=> u.Email.toString() == req.body.Email);
     if (allUsers.AdminPrivilieges = "True") {
         Flight.findById(req.params.id)
@@ -160,9 +165,6 @@ router.delete('/:Email/DeleteFlight/:id',async(req,res)=>{
 
 //Search flight by keyword
 router.get('/:Email/SearchFlight/:searchTerm', async(req,res)=>{
-    allUsers = await User.find();
-    allUsers = allUsers.filter(u=> u.Email.toString() == req.body.Email);
-    if(allUsers.AdminPrivilieges = "True") {
         keyWord = req.params.searchTerm
         //console.log(keyWord);
         allFlightsx = await Flight.find()
@@ -186,10 +188,6 @@ router.get('/:Email/SearchFlight/:searchTerm', async(req,res)=>{
             {Terminal: keyWord}]})
         console.log(allFlights)
         res.status(200).send(allFlights)
-    }
-    else{
-        res.status(400).send("You're not an admin")
-    }
 })
 
 //Edit profile
@@ -211,6 +209,7 @@ router.put('/ChangePassword/:id',async(req,res)=>{
     console.log(req.body.OldPassword)
     console.log(req.body.NewPassword)
     const validPassword = await bcrypt.compare(req.body.OldPassword, allusers.Password);
+    try{
     if (allusers!=null) {
         if(validPassword){
             var pass = await req.body.NewPassword;
@@ -219,13 +218,14 @@ router.put('/ChangePassword/:id',async(req,res)=>{
     // now we set user password to hashed password
         pass = await bcrypt.hash(pass, salt);
                 await allusers.updateOne({"Password": pass})
-                res.status(200).send("Password Changed Successfuly");
+                allusers.save().then(User => res.json(User))
+                
         }
         else{
             res.status(400).send("Please Enter Your Old Password Correctly")
         }
-    }
-    else{
+    }}
+    catch{
         res.status(401).json({ error: "User does not exist" });
     }      
 })

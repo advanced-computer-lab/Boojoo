@@ -4,9 +4,8 @@ import axios from 'axios';
 import '../App.css';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
-import Navbar from 'react-bootstrap/Navbar';
-import Nav from 'react-bootstrap/Nav';
-
+import NavBar from './navbar';
+ 
 class EditUser extends Component {
   constructor(props) {
     super(props);
@@ -23,7 +22,7 @@ class EditUser extends Component {
 
   componentDidMount() {
     axios
-      .get('http://localhost:8000/users/ViewUser/61c5f708377781808aad5894')
+      .get(`http://localhost:8000/users/ViewUser/${window.localStorage.getItem('USERID')}`)
       .then(res => {
         this.setState({
             FirstName: res.data.FirstName,
@@ -77,11 +76,11 @@ class EditUser extends Component {
         Email: this.state.Email,
     };
 
-        const id = window.localStorage.getItem('ID')
+        const id = window.localStorage.getItem('USERID')
         console.log(id);
         console.log(data)
         axios
-        .put('http://localhost:8000/users/EditProfile/61c5f708377781808aad5894', data)
+        .put(`http://localhost:8000/users/EditProfile/${id}`, data)
         .then(res => {
             this.props.history.push('/');
         })
@@ -106,35 +105,14 @@ class EditUser extends Component {
   render() {
     return (
       <>
-      <Navbar sticky="top" bg="light" variant="light">
-        <Navbar.Brand align="left" href="/">
-           {/* <img
-                alt=""
-                src="/logo.png"
-                width="30"
-                height="30"
-                className="d-inline-block align-top"
-           />{' '} */}
-            Boojoo's Flight Reservation System
-        </Navbar.Brand>
-        <Nav className="me-auto">
-            <Nav.Link href="/">Home</Nav.Link>
-            <Nav.Link href="/reservations">Reservations</Nav.Link>
-        </Nav>
-        <Navbar.Toggle />
-        <Navbar.Collapse className="justify-content-end">
-        <Navbar.Text>
-            <a href="/viewUser">User Profile</a>
-        </Navbar.Text>
-        </Navbar.Collapse>
-    </Navbar>  
+      <NavBar/> 
 
       <div className="UpdateBookInfo">
         <div className="container">
           <div className="row">
             <div className="col-md-8 m-auto">
               <br />
-              <Link to="/viewUser" className="btn btn-outline-warning float-left">
+              <Link to={`/viewUser/${window.localStorage.getItem('USERID')}`} className="btn btn-outline-warning float-left">
                   Back
               </Link>
             </div>

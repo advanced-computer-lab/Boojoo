@@ -9,6 +9,7 @@ import { useState } from "react";
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import { FieldVariable__Class } from 'blockly';
+import NavBar from './navbar';
 
 const customStyles = {
     option: provided => ({
@@ -68,42 +69,7 @@ const reserveFlight = (id) => {
 }
 
 const reservePopup = _id => {
-    confirmAlert({
-        title: "Edit Reservation",
-        message: "Are you sure you want to edit this reservation?",
-        buttons: [
-            {
-                label: "Yes",
-                onClick: () => deleteReservation()
-            },
-            {
-                label: "No",
-            }
-        ],
-        closeOnEscape: true,
-        closeOnClickOutside: true,
-    }); 
-}
-
-const deleteReservation = () => {
-    const reservationId = window.localStorage.getItem('RESERVATIONID');
-    const Id = window.localStorage.getItem('ID');
-    axios.delete(`http://localhost:8000/flights/CancelReservation/${reservationId}`)
-    .then( () => {
-        console.log("old deleted")
-        confirmAlert({
-            title: "Edit Reservation",
-            message: "Your reservation has been updated",
-            buttons: [
-                {
-                    label: "Okay",
-                    onClick: () => reserveFlight(Id) 
-                },
-            ],
-            closeOnEscape: false,
-            closeOnClickOutside: false,
-        });  
-    })
+    localStorage.setItem('FLIGHT', 'editing')
 }
 
 class showFlightDescription extends Component {
@@ -237,28 +203,7 @@ class showFlightDescription extends Component {
     return (
 
         <>
-        <Navbar sticky="top" bg="light" variant="light">
-        <Navbar.Brand align="left" href="/">
-        {/* <img
-                alt=""
-                src="/logo.png"
-                width="30"
-                height="30"
-                className="d-inline-block align-top"
-           />{' '} */}
-            Boojoo's Flight Reservation System
-        </Navbar.Brand>
-        <Nav className="me-auto">
-            <Nav.Link href="/">Home</Nav.Link>
-            <Nav.Link href="/reservations">Reservations</Nav.Link>
-        </Nav>
-        <Navbar.Toggle />
-        <Navbar.Collapse className="justify-content-end">
-        <Navbar.Text>
-            <a href="/viewUser">User Profile</a>
-        </Navbar.Text>
-        </Navbar.Collapse>
-    </Navbar>  
+        <NavBar/>  
 
         <div className="ShowBookDetails">
             <div className="container">
@@ -281,10 +226,12 @@ class showFlightDescription extends Component {
 
                 <div className="row">
                     <div className="col-md-12">
-                        <button className="btn btn-outline-info btn-lg btn-block" onClick={() => reservePopup(flight._id)}>Reserve Flight</button>
+                        <Link to={'/payment'} className="btn btn-outline-info btn-lg btn-block" onClick={() => reservePopup(flight._id)}>
+                            Reserve Flight
+                        </Link>
                         <br />
                     </div> 
-                </div> 
+                </div>  
 
             </div>
         </div>

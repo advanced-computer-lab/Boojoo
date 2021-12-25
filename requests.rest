@@ -100,3 +100,15 @@ content-type: application/json
     "Email":"alloo1",
     "Password":"llo2"
 }
+###
+GET http://localhost:8000/flights/viewReservations/61c5f708377781808aad5894
+content-type: application/json
+
+###
+PUT http://localhost:8000/users/ChangePassword/61c7899bbcfe17742dbff09f
+content-type: application/json
+
+{
+    "OldPassword":"03",
+    "NewPassword":"1"
+}

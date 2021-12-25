@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
 import '../App.css';
+import NavBar from './navbar';
 
 class UpdateFlight extends Component {
   constructor(props) {

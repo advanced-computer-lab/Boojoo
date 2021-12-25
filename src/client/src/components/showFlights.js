@@ -14,6 +14,7 @@ import Paper from '@material-ui/core/Paper';
 import axios from 'axios';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
+import NavBar from './navbar';
 
 export default function ShowFlight() {
 

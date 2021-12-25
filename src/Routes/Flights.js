@@ -3,9 +3,21 @@ const router = express.Router();
 const User = require('../Models/User.js');
 const Flight = require('../Models/Flight.js');
 const Reservation = require('../Models/Reservation.js');
+const stripe = require("stripe")("sk_test_51KAWXcJlpdeHnsoJikmh1fh5FqRAOReEtdfOusSTFcsiikALdVKe9X8KOKoiAAtF0A7eonyp9eRY1QxQFkMUBNhf00dknzDztZ");
+require ("dotenv").config();
+const passport = require('passport');
+const flash = require('express-flash');
+const session = require('express-session');
+const initializePassport = require('../passport-config.js');
+initializePassport(passport,
+  email =>
+  User.find(User => User.email === email),
+  id =>
+  User.find(User => User._id === id)
+);
 
 //view Available flights
-router.get('/ViewAvailableFlights', authenticateToken, async (req, res) => {
+router.get('/ViewAvailableFlights', async (req, res) => {
         allFlights = await Flight.find();
         if(allFlights = allFlights.filter(u => u.Available == true)){
             try{
@@ -18,14 +30,14 @@ router.get('/ViewAvailableFlights', authenticateToken, async (req, res) => {
 });
 
 //view flight Details
-router.get('/ViewDetails/:id', authenticateToken, async (req,res) => {
+router.get('/ViewDetails/:id', async (req,res) => {
     Flighty = await Flight.findById(req.params.id);
     res.status(200).json(Flighty);
 })
 
 //Create new Flight
 router.post('/:Email/CreateFlight', async (req, res) => {
-    allUsers = await User.find();
+    allUsers = await Admin.find();
     allUsers = allUsers.filter(u=> u.Email.toString() == req.body.Email);
     if (allUsers.AdminPrivilieges = "True") {
         const allSeats = req.body.Seats
@@ -136,12 +148,33 @@ router.delete('/CancelReservation/:id', async(req,res)=>{
     
 });
 
-router.get('/viewReservations', async (req, res) => {
-        try {
+router.get('/viewReservations/:id', async (req, res) => {
+        
+    try {   
             const allReservations = await Reservation.find();
+            // const user = await User.findById(req.params.id);
+            attendant = await allReservations[Attendant=req.params.id]
+            console.log(attendant)
+            let alo = [];
+            //allFlights = allFlights.filter(F=>F.To==Flighty.From);
+            for(i=0;i<allReservations.length;i++){
+                if(allReservations[i].Attendant==req.params.id)
+                    alo.push(allReservations[i])
+            }
+            res.status(200).send(alo);
+            // const llo = await(req.params.id);
+            // console.log('a')
+            // const user = await allReservations.findOne({Attendant:llo});
+            // console.log(user)
+            // const allReservations = await Reservation.find();
+            // // console.log
+            // if(
+            // attendant.equals(user._id))
+            //     res.status(200).json(allReservations);
+            // console.log(allReservations)
             //const My = await Reservation.Tickety;
             //const all = await 
-            res.status(200).json(allReservations);
+            //res.status(200).json(allReservations);
         } 
         catch (error) {
             res.status(404).json({noReservationFound: 'No Reservations found'});
@@ -208,6 +241,30 @@ router.put('/EditReservation/:id',async(req,res)=>{
         await flighty.save().then(Flight => res.json(Flight));
 })
 
+router.post("/payment", async (req, res) => {
+	let { amount, id } = req.body
+	try {
+		const payment = await stripe.paymentIntents.create({
+			amount,
+			currency: "USD",
+			description: "Flight Reservation",
+			payment_method: id,
+			confirm: true
+		})
+		console.log("Payment", payment)
+		res.json({
+			message: "Payment successful",
+			success: true
+		})
+	} catch (error) {
+		console.log("Error", error)
+		res.json({
+			message: "Payment failed",
+			success: false
+		})
+	}
+})
+
 function isLoggedIn(req, res, next) {
     if (req.isAuthenticated()) {
       console.log('@@isLoggedIn req.isAuthenticated()=true');
@@ -220,6 +277,22 @@ function isLoggedIn(req, res, next) {
       return res.redirect("/login");
     }
   }
+
+//middleware put it whenever we want to authenticate
+function checkAuthenticated(req,res,next) {
+    if(req.isAuthenticated()){
+        return next()
+    }
+      res.redirect('/login')
+}
+
+//middleware put it whenever we don't want an authenticated to go to (like login matro7sh login madam enta logged in,register brdo)
+function checkNotAuthenticated(req, res, next){
+    if(req.isAuthenticated()){
+            return res.redirect('/Home')
+    }
+          next()
+        }
 
 
 

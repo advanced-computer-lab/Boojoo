@@ -9,6 +9,8 @@ import { useState } from "react";
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import { FieldVariable__Class } from 'blockly';
+import NavBar from './navbar';
+//import { useNavigation } from '@react-navigation/native';
 
 const customStyles = {
     option: provided => ({
@@ -25,75 +27,83 @@ const customStyles = {
     })
   }
 
-const reserveFlight = (id) => {
-    //axios.post('http://localhost:8000/flights/ReserveFlight').then( () => {
-        //window.location.reload(false);
-    //})
-    const seatNumberArray = window.localStorage.getItem('SELECTEDSEATS').split(',')
-    if(seatNumberArray[0] == ''){
-        alert('Please reserve an available seat')
-        confirmAlert({
-            customUI: () => {
-                return (
-                    <div>
-                        <h1>Please select a seat </h1>
-                        <p>Error</p>
-                    </div>
-                );
-            },
-            closeOnEscape: true,
-            closeOnClickOutside: true,
-        });
-    }
-    else{
-    console.log(seatNumberArray);
-    const data = {
-        Attendant: '61a7a3d32ecf681ee765d77e',
-        Tickety: id,
-        SeatNumber: seatNumberArray,
-        Price: window.localStorage.getItem('PRICE')
-    };
+// const reserveFlight = (id) => {
+//     //axios.post('http://localhost:8000/flights/ReserveFlight').then( () => {
+//         //window.location.reload(false);
+//     //})
+//     const seatNumberArray = window.localStorage.getItem('SELECTEDSEATS').split(',')
+//     if(seatNumberArray[0] == ''){
+//         alert('Please reserve an available seat')
+//         confirmAlert({
+//             customUI: () => {
+//                 return (
+//                     <div>
+//                         <h1>Please select a seat </h1>
+//                         <p>Error</p>
+//                     </div>
+//                 );
+//             },
+//             closeOnEscape: true,
+//             closeOnClickOutside: true,
+//         });
+//     }
+//     else{
+//     console.log(seatNumberArray);
+//     const data = {
+//         Attendant: '61a7a3d32ecf681ee765d77e',
+//         Tickety: id,
+//         SeatNumber: seatNumberArray,
+//         Price: window.localStorage.getItem('PRICE')
+//     };
 
-    console.log(data);
+//     console.log(data);
 
-    axios
-        .post(`http://localhost:8000/flights/ReserveFlight/${id}`, data)
-        .then(res => {
-            confirmAlert({
-                customUI: () => {
-                    return (
-                        <div>
-                            <h1>Flight Reserved</h1>
-                            <p align='center'>Success</p>
-                        </div>
-                    );
-                },
-                closeOnEscape: true,
-                closeOnClickOutside: true,
-            });
-        })
-        .catch(err => {
-            console.log("Error in Reserving flight");
-        })
-    }
-}
+//     axios
+//         .post(`http://localhost:8000/flights/ReserveFlight/${id}`, data)
+//         .then(res => {
+//             confirmAlert({
+//                 customUI: () => {
+//                     return (
+//                         <div>
+//                             <h1>Flight Reserved</h1>
+//                             <p align='center'>Success</p>
+//                         </div>
+//                     );
+//                 },
+//                 closeOnEscape: true,
+//                 closeOnClickOutside: true,
+//             });
+//         })
+//         .catch(err => {
+//             console.log("Error in Reserving flight");
+//         })
+//     }
+// }
+
+//const navigation = useNavigation();
 
 const reservePopup = _id => {
-    confirmAlert({
-        title: "Reserve Flight",
-        message: "Are you sure you want to reserve this flight?",
-        buttons: [
-            {
-                label: "Yes",
-                onClick: () => reserveFlight(_id)
-            },
-            {
-                label: "No",
-            }
-        ],
-        closeOnEscape: true,
-        closeOnClickOutside: true,
-    }); 
+    localStorage.setItem('FLIGHT', "departure")
+    const seatNumberArray = window.localStorage.getItem('SELECTEDSEATS').split(',')
+    if(seatNumberArray[0] == ''){
+        alert('Please reserve an available seat');
+        //navigation.navigate(`flightDescription/${_id}`);
+    }
+    // confirmAlert({
+    //     title: "Reserve Flight",
+    //     message: "Are you sure you want to reserve this flight?",
+    //     buttons: [
+    //         {
+    //             label: "Yes",
+    //             onClick: () => reserveFlight(_id)
+    //         },
+    //         {
+    //             label: "No",
+    //         }
+    //     ],
+    //     closeOnEscape: true,
+    //     closeOnClickOutside: true,
+    // }); 
 }
 
 const setId = (id) => {
@@ -201,8 +211,7 @@ class showFlightDescription extends Component {
             <td>{ flight.Baggage }</td>
         </tr>
         <tr>
-            <td>Available:</td>
-            <td>{ flight.Available }</td>
+            <td colspan="3">Seats are arranged four per row, in a two by two distribution, where odd seats are on the left and even seats are on the right.</td>
         </tr>
         <tr>
             <td>Seats:</td>
@@ -232,28 +241,7 @@ class showFlightDescription extends Component {
     return (
 
         <>
-        <Navbar sticky="top" bg="light" variant="light">
-        <Navbar.Brand align="left" href="/">
-        {/* <img
-                alt=""
-                src="/logo.png"
-                width="30"
-                height="30"
-                className="d-inline-block align-top"
-           />{' '} */}
-            Boojoo's Flight Reservation System
-        </Navbar.Brand>
-        <Nav className="me-auto">
-            <Nav.Link href="/">Home</Nav.Link>
-            <Nav.Link href="/reservations">Reservations</Nav.Link>
-        </Nav>
-        <Navbar.Toggle />
-        <Navbar.Collapse className="justify-content-end">
-        <Navbar.Text>
-            <a href="/viewUser">User Profile</a>
-        </Navbar.Text>
-        </Navbar.Collapse>
-    </Navbar>  
+        <NavBar/>   
 
         <div className="ShowBookDetails">
             <div className="container">
@@ -276,7 +264,9 @@ class showFlightDescription extends Component {
 
                 <div className="row">
                     <div className="col-md-6">
-                        <button className="btn btn-outline-info btn-lg btn-block" onClick={() => reservePopup(flight._id)}>Reserve Flight</button>
+                        <Link to={'/payment'} className="btn btn-outline-info btn-lg btn-block" onClick={() => reservePopup(flight._id)}>
+                            Reserve Flight
+                        </Link>
                         <br />
                     </div> 
                     <div className="col-md-6">

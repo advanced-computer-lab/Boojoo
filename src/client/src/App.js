@@ -17,6 +17,7 @@ import Login from './components/login';
 import Register from './components/register'
 import EditFlight from './components/editFlight'
 import ChangePassword from './components/changePassword'
+import StripeContainer from './components/StripeContainer'
 
 class App extends Component {
   render() {
@@ -25,13 +26,14 @@ class App extends Component {
         <div>
           <Routes>
             <Route exact path='/' element={<MainPage/>}/>
+            <Route exact path='/payment' element={<StripeContainer/>}/>
             <Route exact path='/changePassword' element={<ChangePassword/>}/>
             <Route exact path='/register' element={<Register/>}/>
             <Route exact path='/editFlight/:id' element={<EditFlight/>}/>
             <Route exact path='/login' element={<Login/>}/>
             <Route exact path='/details/:id' element={<Details/>}/>
             <Route exact path='/returnFlightDescription/:id' element={<ReturnFlightDescription/>}/>
-            <Route exact path='/viewUser' element={<ViewUser/>}/>
+            <Route exact path='/viewUser/:id' element={<ViewUser/>}/>
             <Route exact path='/viewReturnFlights/:id' element={<ViewReturnFlights/>}/>
             <Route exact path='/editUser/:id' element={<EditUser/>}/>
             <Route exact path='/reservations' element={<ReservationPage/>}/>

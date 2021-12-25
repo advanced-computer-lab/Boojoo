@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import ReservationCard from './reservationCard';
+import NavBar from './navbar';
 
 class ShowReservationList extends Component {
   constructor(props) {
@@ -17,7 +18,7 @@ class ShowReservationList extends Component {
 
   componentDidMount() {
     axios
-      .get('http://localhost:8000/flights/viewReservations')
+      .get(`http://localhost:8000/flights/viewReservations/${window.localStorage.getItem('USERID')}`)
       .then(res => {
         this.setState({
           reservations: res.data
@@ -34,7 +35,7 @@ class ShowReservationList extends Component {
     let reservationList;
 
     if(!reservations) {
-        reservationList = "there is no book record!";
+        reservationList = "there is no reservations";
     } else {
         reservationList = reservations.map((reservation, k) =>
             <ReservationCard reservation={reservation} key={k} />
@@ -51,28 +52,7 @@ class ShowReservationList extends Component {
     return (
         
         <>
-        <Navbar sticky="top" bg="light" variant="light">
-        <Navbar.Brand align="left" href="/">
-          {/* <img
-                alt=""
-                src="/logo.png"
-                width="30"
-                height="30"
-                className="d-inline-block align-top"
-           />{' '} */}
-            Boojoo's Flight Reservation System
-        </Navbar.Brand>
-        <Nav className="me-auto">
-            <Nav.Link href="/">Home</Nav.Link>
-            <Nav.Link href="/reservations">Reservations</Nav.Link>
-        </Nav>
-        <Navbar.Toggle />
-        <Navbar.Collapse className="justify-content-end">
-        <Navbar.Text>
-            <a href="/viewUser">User Profile</a>
-        </Navbar.Text>
-        </Navbar.Collapse>
-    </Navbar>  
+        <NavBar/> 
     
       <div className="ShowBookList">
         <div className="container">
