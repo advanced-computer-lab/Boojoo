@@ -276,6 +276,18 @@ Project Link: [https://github.com/advanced-computer-lab/Boojoo](https://github.c
 
 
 
+<!-- API PREFERENCES -->
+## Api Preferences
+
+* [Axios] for linking the backend with the frontend.
+* [Stripe] For Online Payments operations.
+* [MailJs] For sending emails confirming / cancelling / and send iternaries of the reservations(if needed).
+
+
+
+<p align="right">(<a href="#top">back to top</a>)</p>
+
+
 
 <!-- SCREENSHOTS -->
 ## ScreenShots
@@ -286,6 +298,12 @@ Project Link: [https://github.com/advanced-computer-lab/Boojoo](https://github.c
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
+
+
+<!-- FEATURES -->
+### Features
+
+Mainly this website provides an easy way to book Airline flights from an airport to another. Also, allows admins to perform CRUD operations on the website in an easy way. Moreover, our website allows user to pay online with Stripes API to confirm their reservations.
 
 
 <!-- MARKDOWN LINKS & IMAGES -->
