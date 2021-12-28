@@ -73,7 +73,7 @@
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
+    <li><a href="#screenshots">ScreenShots</a></li>
   </ol>
 </details>
 
@@ -97,8 +97,31 @@ Use the `BLANK_README.md` to get started.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
+<!-- MOTIVATION -->
+### Motivation
+
+The following are the objectives of this project:
+
+Master working with MERN Stack.
+Learn how to work together as a team on GitHub.
+Learn how to follow up system requirments part by part to complete a whole software.
 
 
+<!-- BUILD STATUS -->
+### Build Status
+Our website currently offers one-way flights only but we promise we will cover round trips soon
+also, we are goingto add sign out for convenience only.
+
+
+
+<!-- CODING STYLE -->
+### Coding Style
+This Project is Divided into two parts backend which is built with Camel Case and no semi colons after line.while, the other part which is the frontend
+is built with coding standards like Indentation styles and size.
+
+
+
+<!-- BUILT WITH -->
 ### Built With
 
 This section should list any major frameworks/libraries used to bootstrap your project. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
@@ -187,7 +210,7 @@ See the [open issues](https://github.com/othneildrew/Best-README-Template/issues
 <!-- ROUTES -->
 ## Routes
 
-This Server Section is running on index.js File All the Depndencies are on package.json and package-lock.json(in src for backend)
+The Server Section is running on index.js File All the Depndencies are on package.json and package-lock.json(in src for backend)
 and There's two More Package.json and package-lock.json in Src>Client>Src (for FrontEnd)
 There is 4 Model Schemas mongo ones (Admin,User,Flight,Reservation) .With,2 Routes backend ones one for Functioning the users Stories(Users.js) 
 and the other one For functioning Flights Stories(Flights.js)all The routers are in the Routes section every Router has a Comment
@@ -195,6 +218,33 @@ Above it Explaning its Usage.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
+<!-- TESTS -->
+## Tests
+
+Mainly all this project was tested using Rest extension client
+examples:
+###
+ POST http://localhost:8000/Users/Register/ 
+ Content-Type: application/json
+
+{
+"Email":"Ab", "Password":"14567", "PassportNumber":"1001001","FirstName":"zy","LastName":"ay","Address":"he","CountryCode":12,
+"Telephone":11
+}
+
+###
+POST http://localhost:8000/flights/abdo@gmail.com/CreateFlight 
+content-type: application/json
+
+{ "Code": "A2", "Airport": "qahera", "Date": "tomorrow", "Terminal": "3", "Available": true, "Arrival": "el sbt el sob7", "Departure": " bleel","From":"Tahrir", "To":"rehab", "Price":"1500","TripDuration":"sa3a","Seats":15,"Cabin":"Busniess","Baggage":"25" }
+
+### PUT http://localhost:8000/users/ChangePassword/61c7899bbcfe17742dbff09f content-type: application/json
+
+{
+"OldPassword":"03", "NewPassword":"1"
+}
+
+<p align="right">(<a href="#top">back to top</a>)</p>
 
 <!-- CONTRIBUTING -->
 ## Contributing
@@ -225,19 +275,11 @@ Project Link: [https://github.com/advanced-computer-lab/Boojoo](https://github.c
 
 
 
-<!-- ACKNOWLEDGMENTS -->
-## Acknowledgments
 
-Use this space to list resources you find helpful and would like to give credit to. I've included a few of my favorites to kick things off!
 
-* [Choose an Open Source License](https://choosealicense.com)
-* [GitHub Emoji Cheat Sheet](https://www.webpagefx.com/tools/emoji-cheat-sheet)
-* [JavaScript Tutorials](https://www.w3schools.com/js/default.asp)
-* [Npm Packages](https://www.npmjs.com/)
-* [Img Shields](https://shields.io)
-* [GitHub Pages](https://pages.github.com)
-* [Font Awesome](https://fontawesome.com)
-* [React Icons](https://react-icons.github.io/react-icons/search)
+<!-- SCREENSHOTS -->
+## ScreenShots
+
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
