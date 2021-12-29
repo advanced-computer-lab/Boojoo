@@ -119,15 +119,9 @@ export default function MainFlight() {
                     <TableCell align="center">{Flight.Seats}</TableCell>
                     <TableCell align="right">{Flight.Price}</TableCell>
                     <TableCell align="right">
-                        {success?
-                        <Link to = {`flightDescriptionUser/${Flight._id}`}>
+                        <Link to = {`/editFlightDetails/${Flight._id}`}>
                         <Button variant="outlined" size="small" onClick={() => setId(Flight._id, Flight.Seats, Flight.SeatsArray)}>Details</Button>
                         </Link>
-                        :
-                        <Link to = {`flightDescription/${Flight._id}`}>
-                        <Button variant="outlined" size="small" onClick={() => setId(Flight._id, Flight.Seats, Flight.SeatsArray)}>Details</Button>
-                        </Link>
-                        }
                     </TableCell>
                 </TableRow>
                 ))}

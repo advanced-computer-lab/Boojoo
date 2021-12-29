@@ -1,8 +1,8 @@
-POST http://localhost:8000/flights/abdo@gmail.com/CreateFlight 
+POST http://localhost:8000/flights/alloo1/CreateFlight 
 content-type: application/json
 
 {
-"Code": "A2", "Airport": "qahera", "Date": "tomorrow", "Terminal": "3", "Available": true,  "Arrival": "el sbt el sob7", "Departure": " bleel","From":"Tahrir", "To":"rehab",  "Price":"1500","TripDuration":"sa3a","Seats":15,"Cabin":"Busniess","Baggage":"25"
+"Code": "A2", "Airport": "qahera", "Date": "tomorrow", "Terminal": "3", "Available": true,  "Arrival": "el sbt el sob7", "Departure": " bleel","From":"b", "To":"a",  "Price":"1500","TripDuration":"sa3a","Seats":15,"Cabin":"Busniess","Baggage":"25"
 }
 
 ###

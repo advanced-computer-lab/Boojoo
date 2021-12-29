@@ -21,6 +21,20 @@ export default function NavBar() {
         }
     }, [])
 
+    const editPopup = () => {
+        confirmAlert({
+            customUI: () => {
+                return (
+                    <div>
+                        <h1>Please Login First</h1>
+                    </div>
+                );
+            },
+            closeOnEscape: true,
+            closeOnClickOutside: true,
+        });
+    }
+
     console.log(window.localStorage.getItem('token'))
 
     return (
@@ -30,7 +44,12 @@ export default function NavBar() {
         </Navbar.Brand>
         <Nav className="me-auto">
             <Nav.Link href="/">Home</Nav.Link>
+            {success 
+            ?
+            <Nav.Link href="/login">Reservations</Nav.Link>
+            :
             <Nav.Link href="/reservations">Reservations</Nav.Link>
+            }
             <Nav.Link href="/register">Register</Nav.Link>
         </Nav>
         <Navbar.Toggle /> 

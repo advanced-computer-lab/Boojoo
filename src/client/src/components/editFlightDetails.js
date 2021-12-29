@@ -72,7 +72,7 @@ const reservePopup = _id => {
     localStorage.setItem('FLIGHT', 'editing')
 }
 
-class showFlightDescription extends Component {
+class editFlightDetails extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -98,7 +98,7 @@ class showFlightDescription extends Component {
     };
     
     componentDidMount() {
-        const id = window.localStorage.getItem('IDDETAILS')
+        const id = window.localStorage.getItem('ID')
         axios
             .get(`http://localhost:8000/flights/ViewDetails/${id}`)
             .then(res => {
@@ -226,7 +226,7 @@ class showFlightDescription extends Component {
                 <div className="row">
                     <div className="col-md-6">
                         <Link to={'/payment'} className="btn btn-outline-info btn-lg btn-block" onClick={() => reservePopup(flight._id)}>
-                            Edit Seats
+                            Reserve Flight
                         </Link>
                         <br />
                     </div> 
@@ -245,4 +245,4 @@ class showFlightDescription extends Component {
     }
 }
 
-export default showFlightDescription;
+export default editFlightDetails;

@@ -18,6 +18,9 @@ import Register from './components/register'
 import EditFlight from './components/editFlight'
 import ChangePassword from './components/changePassword'
 import StripeContainer from './components/StripeContainer'
+import ChangeFlight from './components/ChangeFlight'
+import EditFlightDetails from './components/editFlightDetails'
+import FlightDescriptionUser from './components/flightDescriptionUser'
 
 class App extends Component {
   render() {
@@ -26,6 +29,8 @@ class App extends Component {
         <div>
           <Routes>
             <Route exact path='/' element={<MainPage/>}/>
+            <Route exact path='/editFlightDetails/:id' element={<EditFlightDetails/>}/>
+            <Route exact path='/ChangeFlight' element={<ChangeFlight/>}/>
             <Route exact path='/payment' element={<StripeContainer/>}/>
             <Route exact path='/changePassword' element={<ChangePassword/>}/>
             <Route exact path='/register' element={<Register/>}/>
@@ -38,6 +43,7 @@ class App extends Component {
             <Route exact path='/editUser/:id' element={<EditUser/>}/>
             <Route exact path='/reservations' element={<ReservationPage/>}/>
             <Route exact path='/flightDescription/:id' element={<FlightDescription/>}/>
+            <Route exact path='/flightDescriptionUser/:id' element={<FlightDescriptionUser/>}/>
             <Route exact path='/admin/view-flights' element={<ShowFlights/>}/>
             <Route path='/admin/create-flight' element={<CreateFlight/>} />
             <Route path='/admin/edit-flight/:id' element={<UpdateFlight/>} />

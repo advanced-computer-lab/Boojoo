@@ -5,6 +5,7 @@ import React, { useState } from 'react'
 import { confirmAlert } from 'react-confirm-alert';
 import { Link } from 'react-router-dom';
 import NavBar from './navbar';
+import emailjs from "emailjs-com";
 
 
 const CARD_OPTIONS = {
@@ -26,6 +27,21 @@ const CARD_OPTIONS = {
 	}
 }
 
+function sendFeedback(serviceID, templateId, variables) {
+    emailjs
+      .send(serviceID, templateId, variables, "user_CCxKgwz23h5XgPi9io3gH")
+      .then((res) => {
+        console.log("Email successfully sent!");
+      })
+      // Handle errors here however you like, or use a React error boundary
+      .catch((err) =>
+        console.error(
+          "Oh well, you failed. Here some thoughts on the error that occured:",
+          err
+        )
+      );
+  }
+
 const reserveFlight = (id) => {
     const reservationId = window.localStorage.getItem('RESERVATIONID');
     const seatNumberArray = window.localStorage.getItem('SELECTEDSEATS').split(',')
@@ -42,6 +58,12 @@ const reserveFlight = (id) => {
     axios
         .post(`http://localhost:8000/flights/ReserveFlight/${window.localStorage.getItem('IDDETAILS')}`, data)
         .then(res => {
+            sendFeedback("service_asy0wzd", "template_ogn6pch", {
+                message: "As you requested, here are your flight details, Ticket: " + window.localStorage.getItem('ID') + ", Seats: " + window.localStorage.getItem('SELECTEDSEATS') + ".",
+                to_name: "User",
+                from_name: "Boojoo's Airline Reservation System",
+                email: "haha@gmail.com",
+            });
         })
         .catch(err => {
             console.log("Error in Reserving flight");
@@ -119,6 +141,13 @@ export default function PaymentForm() {
                  closeOnEscape: true,
                  closeOnClickOutside: true,
              });
+             sendFeedback("service_asy0wzd", "template_ogn6pch", {
+                message: "As you requested, here are your flight details, Ticket: " + window.localStorage.getItem('ID') + ", Seats: " + window.localStorage.getItem('SELECTEDSEATS') + ".",
+                to_name: "User",
+                from_name: "Boojoo's Airline Reservation System",
+                email: "haha@gmail.com",
+            });
+
          })
          .catch(err => {
              console.log("Error in Reserving flight");
@@ -150,6 +179,12 @@ export default function PaymentForm() {
                  closeOnEscape: true, 
                  closeOnClickOutside: true,
              });
+             sendFeedback("service_asy0wzd", "template_ogn6pch", {
+                message: "As you requested, here are your flight details, Ticket: " + window.localStorage.getItem('ID') + ", Seats: " + window.localStorage.getItem('SELECTEDSEATS') + ".",
+                to_name: "User",
+                from_name: "Boojoo's Airline Reservation System",
+                email: "haha@gmail.com",
+            });
          })
          .catch(err => {
             console.log("Error in Reserving flight");

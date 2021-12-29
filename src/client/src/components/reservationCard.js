@@ -48,14 +48,22 @@ const ReservationCard = (props) => {
         function handleSubmit() {
         sendFeedback("service_asy0wzd", "template_ogn6pch", {
             message: "We would like to confirm your cancellation, " + reservation.Price +" to be refunded.",
-            to_name: "Mohamed1",
+            to_name: "User",
             from_name: "Boojoo's Airline Reservation System",
             email: "haha@gmail.com",
         });
 
         localStorage.setItem('ISDELETED', true);
       }
-      
+
+    function sendItem() {
+        sendFeedback("service_asy0wzd", "template_ogn6pch", {
+            message: "As you requested, here are your flight details, Ticket: " + reservation.Tickety + ", Seats: " + reservation.SeatNumber + ".",
+            to_name: "User",
+            from_name: "Boojoo's Airline Reservation System",
+            email: "haha@gmail.com",
+        });
+    }
 
     function sendFeedback(serviceID, templateId, variables) {
         emailjs
@@ -120,6 +128,9 @@ const ReservationCard = (props) => {
                     </div>
                     <div padding="5" className="btn btn-outline-warning float">
                     <Button align="left" size="small" onClick={() => deletePopup(reservation._id)}>Cancel</Button>
+                    </div> 
+                    <div padding="5" className="btn btn-outline-warning float">
+                    <Button align="left" size="small" onClick={() => sendItem()}>Send Details</Button>
                     </div> 
                 </div>
             </div>

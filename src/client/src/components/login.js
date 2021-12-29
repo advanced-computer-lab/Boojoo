@@ -48,6 +48,7 @@ class LoginUser extends Component {
             console.log(res.data);
             localStorage.setItem('USERID', res.data._id)
             localStorage.setItem('token', res.data.token)
+            localStorage.setItem('isLoggedIn', 'true')
             console.log(res.data.message)
             if(res.data.message == "Valid admin password"){
               localStorage.setItem('admin', true)

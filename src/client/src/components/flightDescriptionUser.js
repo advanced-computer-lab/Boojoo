@@ -10,6 +10,7 @@ import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import { FieldVariable__Class } from 'blockly';
 import NavBar from './navbar';
+//import { useNavigation } from '@react-navigation/native';
 
 const customStyles = {
     option: provided => ({
@@ -26,50 +27,78 @@ const customStyles = {
     })
   }
 
-const reserveFlight = (id) => {
-    //axios.post('http://localhost:8000/flights/ReserveFlight').then( () => {
-        //window.location.reload(false);
-    //})
-    const seatNumberArray = window.localStorage.getItem('SELECTEDSEATS').split(',')
-    if(seatNumberArray[0] == ''){
-        alert('Please reserve an available seat')
-        confirmAlert({
-            customUI: () => {
-                return (
-                    <div>
-                        <h1>Please select a seat </h1>
-                        <p>Error</p>
-                    </div>
-                );
-            },
-            closeOnEscape: true,
-            closeOnClickOutside: true,
-        });
-    }
-    else{
-    console.log(seatNumberArray);
-    const reservationId = window.localStorage.getItem('RESERVATIONID');
-    const data = {
-        Attendant: '61a7a3d32ecf681ee765d77e',
-        Tickety: id,
-        SeatNumber: seatNumberArray,
-        Price: window.localStorage.getItem('PRICE')
-    };
+// const reserveFlight = (id) => {
+//     //axios.post('http://localhost:8000/flights/ReserveFlight').then( () => {
+//         //window.location.reload(false);
+//     //})
+//     const seatNumberArray = window.localStorage.getItem('SELECTEDSEATS').split(',')
+//     if(seatNumberArray[0] == ''){
+//         alert('Please reserve an available seat')
+//         confirmAlert({
+//             customUI: () => {
+//                 return (
+//                     <div>
+//                         <h1>Please select a seat </h1>
+//                         <p>Error</p>
+//                     </div>
+//                 );
+//             },
+//             closeOnEscape: true,
+//             closeOnClickOutside: true,
+//         });
+//     }
+//     else{
+//     console.log(seatNumberArray);
+//     const data = {
+//         Attendant: '61a7a3d32ecf681ee765d77e',
+//         Tickety: id,
+//         SeatNumber: seatNumberArray,
+//         Price: window.localStorage.getItem('PRICE')
+//     };
 
-    console.log(data);
+//     console.log(data);
 
-    axios
-        .post(`http://localhost:8000/flights/ReserveFlight/${id}`, data)
-        .then(res => {
-        })
-        .catch(err => {
-            console.log("Error in Reserving flight");
-        })
-    }
-}
+//     axios
+//         .post(`http://localhost:8000/flights/ReserveFlight/${id}`, data)
+//         .then(res => {
+//             confirmAlert({
+//                 customUI: () => {
+//                     return (
+//                         <div>
+//                             <h1>Flight Reserved</h1>
+//                             <p align='center'>Success</p>
+//                         </div>
+//                     );
+//                 },
+//                 closeOnEscape: true,
+//                 closeOnClickOutside: true,
+//             });
+//         })
+//         .catch(err => {
+//             console.log("Error in Reserving flight");
+//         })
+//     }
+// }
+
+//const navigation = useNavigation();
 
 const reservePopup = _id => {
-    localStorage.setItem('FLIGHT', 'editing')
+    confirmAlert({
+        customUI: () => {
+            return (
+                <div>
+                    <h1>Please Login First</h1>
+                </div>
+            );
+        },
+        closeOnEscape: true,
+        closeOnClickOutside: true,
+    }); 
+}
+
+const setId = (id) => {
+    console.log(id)
+    localStorage.setItem('ID', id);
 }
 
 class showFlightDescription extends Component {
@@ -98,7 +127,7 @@ class showFlightDescription extends Component {
     };
     
     componentDidMount() {
-        const id = window.localStorage.getItem('IDDETAILS')
+        const id = window.localStorage.getItem('ID')
         axios
             .get(`http://localhost:8000/flights/ViewDetails/${id}`)
             .then(res => {
@@ -122,7 +151,7 @@ class showFlightDescription extends Component {
         var seatsList = [];
         seatsArray.forEach(function(element) {
             seatsList.push({ label:element, value: element })
-        });
+        }); 
 
         let FlightItem = <div>
         <table className="table table-hover table-dark">
@@ -172,8 +201,7 @@ class showFlightDescription extends Component {
             <td>{ flight.Baggage }</td>
         </tr>
         <tr>
-            <td>Available:</td>
-            <td>{ flight.Available }</td>
+            <td colspan="3">Seats are arranged four per row, in a two by two distribution, where odd seats are on the left and even seats are on the right.</td>
         </tr>
         <tr>
             <td>Seats:</td>
@@ -184,7 +212,7 @@ class showFlightDescription extends Component {
                     name="seats"
                     styles={customStyles}
                     value={selectedOption}
-                    options={seatsList}
+                    placeholder="Please login to view seats"
                     className="basic-multi-select"
                     closeMenuOnSelect={false}
                     classNamePrefix="select"
@@ -203,19 +231,20 @@ class showFlightDescription extends Component {
     return (
 
         <>
-        <NavBar/>  
+        <NavBar/>   
+
         <div className="ShowBookDetails">
             <div className="container">
                 <div className="row">
                     <div className="col-md-10 m-auto">
                         <br /> <br />
-                        <Link to="/reservations" className="btn btn-outline-warning float-left">
-                            Back
+                        <Link to="/" className="btn btn-outline-warning float-left">
+                            Flight List
                         </Link>
                     </div>
                     <br />
                     <div className="col-md-8 m-auto">
-                        <h1 className="display-4 text-center">Edit Flight</h1>
+                        <h1 className="display-4 text-center">Flight Details</h1>
                         <hr /> <br />
                     </div>
                 </div>
@@ -225,18 +254,18 @@ class showFlightDescription extends Component {
 
                 <div className="row">
                     <div className="col-md-6">
-                        <Link to={'/payment'} className="btn btn-outline-info btn-lg btn-block" onClick={() => reservePopup(flight._id)}>
-                            Edit Seats
+                        <Link to={'/login'} className="btn btn-outline-info btn-lg btn-block" onClick={() => reservePopup(flight._id)}>
+                            Reserve Flight
                         </Link>
                         <br />
                     </div> 
                     <div className="col-md-6">
-                        <Link to={'/ChangeFlight'} className="btn btn-outline-info btn-lg btn-block" onClick={() => reservePopup(flight._id)}>
-                            Change Flight
+                        <Link to={'/login'} className="btn btn-outline-info btn-lg btn-block" onClick={() => reservePopup(flight._id)}>
+                            View Return Flights
                         </Link>
                         <br />
-                    </div> 
-                </div>  
+                    </div>
+                </div> 
 
             </div>
         </div>
